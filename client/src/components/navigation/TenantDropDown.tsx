@@ -1,52 +1,103 @@
-import React from "react";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import React, { useState } from "react";
+
 import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useTenant } from "../../contexts/useTenant";
+import AddTenantModal from "../AddTenantModal";
+import { Button, MenuItem, Menu } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export default function TenantDropdown() {
   const { data } = useQuery(GET_ALL_TENANTS);
   const navigate = useNavigate();
   const { setCurrentTenantId, currentTenantId } = useTenant();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   if (!data?.tenants?.length) return null;
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleTenantChange = (tenantId: string) => {
     setCurrentTenantId(tenantId);
     navigate(`/${tenantId}/topology`);
+    handleMenuClose();
   };
 
-  return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-          {data.tenants.find((tenant) => tenant.id === currentTenantId)?.name}
-          <ChevronDownIcon
-            aria-hidden="true"
-            className="-mr-1 size-5 text-gray-400"
-          />
-        </MenuButton>
-      </div>
+  const handleAddTenant = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsModalOpen(true);
+    handleMenuClose();
+  };
 
-      <MenuItems
-        transition
-        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none"
+  const currentTenant = data.tenants.find(
+    (tenant) => tenant.id === currentTenantId
+  );
+
+  return (
+    <div>
+      <Button
+        onClick={handleMenuOpen}
+        endIcon={<KeyboardArrowDownIcon />}
+        variant="outlined"
+        disableRipple
+        size="large"
+        sx={{
+          textTransform: "none",
+          minWidth: "180px",
+          fontWeight: "bold",
+        }}
       >
-        <div className="py-1">
-          {data.tenants.map((tenant) => (
-            <MenuItem key={tenant.id}>
-              <button
-                onClick={() => handleTenantChange(tenant.id)}
-                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-              >
-                {tenant.name}
-              </button>
-            </MenuItem>
-          ))}
-        </div>
-      </MenuItems>
-    </Menu>
+        {currentTenant?.name}
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        sx={{
+          ul: {
+            paddingBottom: "0px",
+          },
+        }}
+      >
+        {data.tenants.map((tenant) => (
+          <MenuItem
+            key={tenant.id}
+            onClick={() => handleTenantChange(tenant.id)}
+          >
+            {tenant.name}
+          </MenuItem>
+        ))}
+        <MenuItem
+          onClick={handleAddTenant}
+          sx={{
+            color: "white",
+            bgcolor: "primary.main",
+            "&:hover": {
+              bgcolor: "primary.dark",
+            },
+          }}
+        >
+          Add Tenant
+        </MenuItem>
+      </Menu>
+      <AddTenantModal open={isModalOpen} setOpen={setIsModalOpen} />
+    </div>
   );
 }
