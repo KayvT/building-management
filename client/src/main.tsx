@@ -7,9 +7,14 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { BrowserRouter } from "react-router";
 import React from "react";
 
+const currentTenantId = localStorage.getItem("currentTenantId");
+
 const client = new ApolloClient({
   uri: "http://localhost:4000",
   cache: new InMemoryCache(),
+  headers: {
+    "X-Tenant-ID": currentTenantId || "",
+  },
 });
 
 createRoot(document.getElementById("root")!).render(
