@@ -16,7 +16,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <App />
+        <div className="h-screen w-screen bg-gray-100">
+          <App />
+        </div>
       </ApolloProvider>
     </BrowserRouter>
   </StrictMode>
