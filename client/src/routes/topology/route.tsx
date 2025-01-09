@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function ToplogyRoute() {
+export default function TopologyRoute() {
   return <div>Toplogy</div>;
 }
