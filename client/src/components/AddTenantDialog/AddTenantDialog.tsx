@@ -8,9 +8,9 @@ import {
   TextField,
 } from "@mui/material";
 import { useApolloClient } from "@apollo/client";
-import { createTenant } from "../graphql/mutations/tenants";
-import { GET_ALL_TENANTS } from "../graphql/queries/tenants";
-import { useTenant } from "../contexts/useTenant";
+import { createTenant } from "../../graphql/mutations/tenants";
+import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";
+import { useTenant } from "../../contexts/useTenant";
 import { useNavigate } from "react-router-dom";
 
 export default function AddTenantModal({
