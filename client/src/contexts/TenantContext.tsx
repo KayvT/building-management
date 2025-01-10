@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import { createContext } from "react";
 
 interface TenantContextType {
   currentTenantId: string | null;
@@ -6,23 +6,3 @@ interface TenantContextType {
 }
 
 export const TenantContext = createContext<TenantContextType | undefined>(undefined);
-
-export function TenantProvider({ children }: { children: ReactNode }) {
-  const [currentTenantId, setCurrentTenantId] = useState<string | null>(() => {
-    return localStorage.getItem('currentTenantId');
-  });
-
-  useEffect(() => {
-    if (currentTenantId) {
-      localStorage.setItem('currentTenantId', currentTenantId);
-    } else {
-      localStorage.removeItem('currentTenantId');
-    }
-  }, [currentTenantId]);
-
-  return (
-    <TenantContext.Provider value={{ currentTenantId, setCurrentTenantId }}>
-      {children}
-    </TenantContext.Provider>
-  );
-}
