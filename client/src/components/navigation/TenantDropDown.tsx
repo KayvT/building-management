@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";
+import { GET_ALL_TENANTS, GET_TENANT } from "../../graphql/queries/tenants";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useTenant } from "../../contexts/useTenant";
-import AddTenantModal from "../AddTenantDialog/AddTenantDialog";
+import AddTenantModal from "../AddTenantModal";
 import { Button, MenuItem, Menu } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
