@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { GET_ALL_TENANTS, GET_TENANT } from "../../graphql/queries/tenants";
+import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { useTenant } from "../../contexts/useTenant";
@@ -14,7 +14,6 @@ export default function TenantDropdown() {
   const { setCurrentTenantId, currentTenantId } = useTenant();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   if (!data?.tenants?.length) return null;
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
