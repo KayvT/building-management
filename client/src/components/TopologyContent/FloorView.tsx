@@ -97,15 +97,20 @@ export const FloorView = () => {
 
   return (
     <div>
-      <div className="flex flex-row gap-2 items-center justify-between mb-4">
-        <p className="text-2xl font-bold">{floorName.name}</p>
+      <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
+        <div className="flex flex-col gap-1">
+          <p className="text-[8px] bg-[#84B067] text-white rounded-md px-1 py-1 w-fit">
+            Floor
+          </p>
+          <p className="text-2xl font-bold">{floorName}</p>
+          <p className="text-[10px]">
+            <span className="text-gray-500">{`${locations.length} Location${locations.length > 1 || locations.length === 0 ? "s" : ""}`}</span>
+          </p>
+        </div>
         <div className="flex flex-col items-end justify-center gap-1">
           <div className="text-gray-500 text-md mb-1 flex flex-row gap-6 justify-between w-full">
             <p>
               <span className="font-bold">ID:</span> {floorId}
-            </p>
-            <p className="text-[10px] bg-blue-500 text-white rounded-md px-1 py-1">
-              Floor
             </p>
           </div>
 
@@ -116,13 +121,19 @@ export const FloorView = () => {
             sx={{ fontSize: "10px" }}
             onClick={handleDeleteFloor}
           >
-            DELETE LOCATION
+            DELETE FLOOR
           </Button>
         </div>
       </div>
       <p className="text-xl font-bold mb-4">All Locations</p>
-      <div className="grid grid-cols-3  gap-2 mb-4 ">
-        {["Location Name", "Location ID", "Options"].map((item) => (
+      <div className="grid grid-cols-5  gap-2 mb-4 ">
+        {[
+          "Location Name",
+          "Location ID",
+          "Status",
+          "Total Spots",
+          "Options",
+        ].map((item) => (
           <p
             className="text-md text-black pl-2 mt-2 font-bold text-center"
             key={item}
@@ -134,7 +145,7 @@ export const FloorView = () => {
       {locations?.map((location, index) => (
         <div
           key={location.id}
-          className={`grid grid-cols-3 gap-2 ${
+          className={`grid grid-cols-5 gap-2 ${
             index % 2 === 0 ? "bg-gray-100" : ""
           }`}
         >
@@ -143,6 +154,12 @@ export const FloorView = () => {
           </p>
           <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
             {location.id}
+          </p>
+          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
+            {location.occupancy}
+          </p>
+          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
+            {location.spots.length}
           </p>
           <p className="text-md text-blue-500 mt-3 mb-3 text-center">
             <Tooltip

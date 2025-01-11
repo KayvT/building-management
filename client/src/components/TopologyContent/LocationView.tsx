@@ -1,37 +1,101 @@
 import { useApolloClient, useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import { ADD_SPOT } from "../../graphql/mutations/topology";
-import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  ADD_SPOT,
+  DELETE_LOCATION,
+  GET_FLOOR,
+  UPDATE_LOCATION,
+} from "../../graphql/mutations/topology";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DELETE_SPOT, GET_LOCATION } from "../../graphql/queries/tenants";
+import {
+  DELETE_SPOT,
+  GET_LOCATION,
+  GET_TOPOLOGY,
+} from "../../graphql/queries/tenants";
 
 export const LocationView = () => {
-  const { locationId } = useParams();
+  const { tenantId, locationId, floorId } = useParams();
+  const navigate = useNavigate();
   const [isAddingSpot, setIsAddingSpot] = useState(false);
   const [newSpotName, setNewSpotName] = useState("");
+  const [open, setOpen] = useState(false);
+
   const client = useApolloClient();
 
   const { data: locationData, loading } = useQuery(GET_LOCATION, {
     variables: {
       id: locationId,
     },
+    pollInterval: 10000,
   });
-  if (loading)
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <CircularProgress />
-      </div>
-    );
 
-  const { spots, name: locationName } = locationData.location;
+  const [newLocationData, setNewLocationData] = useState({
+    // name: locationData?.location?.name,
+    // occupancy: locationData?.location?.occupancy,
+    // locationType: locationData?.location?.locationType,
+    name: "",
+    occupancy: "",
+    locationType: "",
+  });
+
+  const handleDeleteLocation = async () => {
+    try {
+      await client.mutate({
+        mutation: DELETE_LOCATION,
+        variables: {
+          locationId: locationId,
+        },
+        refetchQueries: [GET_FLOOR, GET_TOPOLOGY],
+      });
+      navigate(`/${tenantId}/topology/floors/${floorId}`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUpdateLocation = async () => {
+    try {
+      await client.mutate({
+        mutation: UPDATE_LOCATION,
+        variables: {
+          locationId: locationId,
+          data: {
+            name: newLocationData.name,
+            occupancy: newLocationData.occupancy,
+            locationType: newLocationData.locationType,
+          },
+        },
+        refetchQueries: [GET_LOCATION, GET_FLOOR],
+      });
+      setOpen(false);
+      setNewLocationData({
+        name: locationData?.location?.name,
+        occupancy: locationData?.location?.occupancy,
+        locationType: locationData?.location?.locationType,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleAddSpot = () => {
     setIsAddingSpot(true);
   };
 
   const handleDeleteSpot = async (id: string) => {
-    console.log("delete spot", id);
     try {
       await client.mutate({
         mutation: DELETE_SPOT,
@@ -64,19 +128,89 @@ export const LocationView = () => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    setNewLocationData({
+      name: locationData?.location?.name,
+      occupancy: locationData?.location?.occupancy,
+      locationType: locationData?.location?.locationType,
+    });
+  }, [locationData]);
+
+  if (loading || !locationData)
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <CircularProgress />
+      </div>
+    );
+
+  const { spots, name: locationName, locationType } = locationData.location;
+  console.log("ORIGINAL", locationData);
+  console.log("NEW", newLocationData);
   return (
     <div>
-      <div className="flex flex-row gap-2 items-center justify-between mb-4">
-        <p className="text-2xl font-bold">{locationName}</p>
-        <div className="flex flex-col items-center justify-center gap-1">
-          <p className="text-gray-500 text-md mb-1">
-            <span className="font-bold">ID:</span> {locationId}
-          </p>
-          <p className="text-sm bg-blue-500 text-white rounded-md px-2 py-1">
-            Location
-          </p>
-          <Button variant="contained" color="error">
-            DELETE LOCATION
+      <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
+        <div className="flex flex-row gap-2 items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <p className="text-[8px] bg-[#718cc0] text-white rounded-md px-1 py-1 w-fit">
+              {locationType}
+            </p>
+            <p className="text-2xl font-bold">{locationName}</p>
+            <p className="text-sm">
+              <span
+                className={`${
+                  newLocationData.occupancy === "OCCUPIED"
+                    ? "text-green-500"
+                    : "text-red-500"
+                } flex flex-row items-center justify-start gap-1`}
+              >
+                <span className="relative flex h-3 w-3">
+                  <span
+                    className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                      newLocationData.occupancy === "OCCUPIED"
+                        ? "bg-green-400"
+                        : "bg-red-400"
+                    } opacity-75`}
+                  ></span>
+                  <span
+                    className={`relative inline-flex rounded-full h-3 w-3 ${
+                      newLocationData.occupancy === "OCCUPIED"
+                        ? "bg-green-500"
+                        : "bg-red-500"
+                    }`}
+                  ></span>
+                </span>
+                {newLocationData.occupancy}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col items-end justify-center gap-1">
+          <div className="text-gray-500 text-md mb-1 flex flex-row gap-6 justify-between w-full">
+            <p>
+              <span className="font-bold">ID:</span> <span>{locationId}</span>
+            </p>
+          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            sx={{ fontSize: "10px" }}
+            onClick={() => setOpen(true)}
+          >
+            Update Location
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="small"
+            sx={{ fontSize: "10px" }}
+            onClick={handleDeleteLocation}
+          >
+            Delete Location
           </Button>
         </div>
       </div>
@@ -154,7 +288,7 @@ export const LocationView = () => {
             size="small"
             value={newSpotName}
             onChange={(e) => setNewSpotName(e.target.value)}
-            placeholder="Enter floor name"
+            placeholder="Spot name"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSubmitNewSpot();
@@ -206,6 +340,56 @@ export const LocationView = () => {
           Add Spot
         </Button>
       )}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>Update Location</DialogTitle>
+        <DialogContent className="flex flex-col gap-4">
+          <TextField
+            autoFocus
+            size="small"
+            value={newLocationData.name}
+            onChange={(e) =>
+              setNewLocationData({ ...newLocationData, name: e.target.value })
+            }
+            placeholder="Location name"
+          />
+          <Select
+            size="small"
+            value={newLocationData.occupancy}
+            onChange={(e) =>
+              setNewLocationData({
+                ...newLocationData,
+                occupancy: e.target.value as string,
+              })
+            }
+            label="Select Occupancy"
+          >
+            <MenuItem value="OCCUPIED">OCCUPIED</MenuItem>
+            <MenuItem value="UNOCCUPIED">UNOCCUPIED</MenuItem>
+          </Select>
+          <Select
+            size="small"
+            value={newLocationData.locationType}
+            onChange={(e) =>
+              setNewLocationData({
+                ...newLocationData,
+                locationType: e.target.value,
+              })
+            }
+            label="Select Location Type"
+          >
+            <MenuItem value="OFFICE">OFFICE</MenuItem>
+            <MenuItem value="EATING_AREA">EATING_AREA</MenuItem>
+            <MenuItem value="WASH_ROOM">WASH_ROOM</MenuItem>
+            <MenuItem value="RECEPTION">RECEPTION</MenuItem>
+            <MenuItem value="CORRIDOR">CORRIDOR</MenuItem>
+            <MenuItem value="OTHER">OTHER</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleUpdateLocation}>Update</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
