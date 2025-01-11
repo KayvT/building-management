@@ -1,6 +1,5 @@
 import React from "react";
 import TenantDropdown from "./TenantDropDown";
-import { Disclosure } from "@headlessui/react";
 import { Link, useLocation } from "react-router-dom";
 import { useTenant } from "../../contexts/useTenant";
 
@@ -19,7 +18,7 @@ export default function NavigationHeader() {
   const pathname = useLocation().pathname;
 
   return (
-    <Disclosure as="nav" className="bg-white shadow">
+    <div className="bg-white drop-shadow-xl">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between max-w-screen-xl">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden"></div>
@@ -54,6 +53,6 @@ export default function NavigationHeader() {
           </div>
         </div>
       </div>
-    </Disclosure>
+    </div>
   );
 }
