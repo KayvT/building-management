@@ -93,7 +93,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                   </span>
                 </Link>
                 {location.spots?.map((spot) => (
-                  <p
+                  <div
                     key={spot.id}
                     style={{ paddingLeft: "60px" }}
                     className="flex items-center relative ml-2 pt-1 pb-1"
@@ -101,7 +101,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                     <div className="absolute left-0 top-0 h-full w-[2px] bg-gray-200" />
                     <div className="absolute left-0 top-1/2 w-12 h-[2px] bg-gray-200" />
                     <span>📍 {spot.name}</span>
-                  </p>
+                  </div>
                 ))}
               </React.Fragment>
             ))}

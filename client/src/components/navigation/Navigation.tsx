@@ -37,10 +37,9 @@ export default function NavigationHeader() {
                     className={classNames(
                       pathname.split("/")[2] === item.href.split("/")[1]
                         ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "rounded-md px-3 py-2 text-sm font-medium"
+                        : "text-gray-500 hover:translate-y-[-2px] hover:text-gray-900 transition-all duration-300",
+                      "rounded-md px-3 py-2 text-sm font-medium transition-all duration-300"
                     )}
-                    // aria-current={item.current ? "page" : undefined}
                   >
                     {item.name}
                   </Link>
