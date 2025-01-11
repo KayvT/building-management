@@ -71,3 +71,21 @@ export const UPDATE_LOCATION = gql`
     }
   }
 `;
+
+export const UPDATE_FLOOR = gql`
+  mutation UpdateFloor($floorId: ID!, $data: UpdateFloorInput!) {
+    updateFloor(floorId: $floorId, data: $data) {
+      id
+      name
+    }
+  }
+`;
+
+export const UPDATE_SPOT = gql`
+  mutation UpdateSpot($spotId: ID!, $data: UpdateSpotInput!) {
+    updateSpot(spotId: $spotId, data: $data) {
+      id
+      name
+    }
+  }
+`;
