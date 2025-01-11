@@ -14,6 +14,7 @@ export const GET_TASKS = gql`
       priority
       operative {
         id
+        name
       }
     }
   }
