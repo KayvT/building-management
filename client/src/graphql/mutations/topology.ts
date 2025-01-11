@@ -46,6 +46,10 @@ export const GET_FLOOR = gql`
       locations {
         id
         name
+        occupancy
+        spots {
+          id
+        }
       }
     }
   }
@@ -54,5 +58,16 @@ export const GET_FLOOR = gql`
 export const DELETE_LOCATION = gql`
   mutation DeleteLocation($locationId: ID!) {
     deleteLocation(locationId: $locationId)
+  }
+`;
+
+export const UPDATE_LOCATION = gql`
+  mutation UpdateLocation($locationId: ID!, $data: UpdateLocationInput!) {
+    updateLocation(locationId: $locationId, data: $data) {
+      id
+      name
+      occupancy
+      locationType
+    }
   }
 `;

@@ -53,6 +53,8 @@ export const GET_LOCATION = gql`
     location(id: $id) {
       id
       name
+      occupancy
+      locationType
       spots {
         id
         name
