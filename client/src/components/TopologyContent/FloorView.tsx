@@ -1,9 +1,13 @@
 import { useApolloClient, useQuery } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   ADD_LOCATION,
   DELETE_LOCATION,
   GET_FLOOR,
+  UPDATE_FLOOR,
 } from "../../graphql/mutations/topology";
 import {
   Button,
@@ -20,6 +24,8 @@ import { DELETE_FLOOR, GET_TOPOLOGY } from "../../graphql/queries/tenants";
 export const FloorView = () => {
   const [isAddingLocation, setIsAddingLocation] = useState(false);
   const [newLocationName, setNewLocationName] = useState("");
+  const [isEditingFloorName, setIsEditingFloorName] = useState(false);
+  const [newFloorName, setNewFloorName] = useState("");
   const { floorId, tenantId } = useParams();
   const client = useApolloClient();
   const navigate = useNavigate();
@@ -30,12 +36,11 @@ export const FloorView = () => {
     },
   });
 
-  if (loading)
-    return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <CircularProgress />
-      </div>
-    );
+  useEffect(() => {
+    if (data?.floor?.name) {
+      setNewFloorName(data?.floor?.name);
+    }
+  }, [data?.floor?.name]);
 
   const handleAddLocation = () => {
     setIsAddingLocation(true);
@@ -91,9 +96,35 @@ export const FloorView = () => {
     }
   };
 
-  if (!data.floor) return <div>No floor ID</div>;
+  const handleSubmitNewFloorName = async () => {
+    if (!newFloorName.trim()) return;
+    try {
+      await client.mutate({
+        mutation: UPDATE_FLOOR,
+        variables: {
+          floorId,
+          data: {
+            name: newFloorName,
+          },
+        },
+        refetchQueries: [GET_FLOOR],
+      });
+      setIsEditingFloorName(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!data?.floor) return <CircularProgress />;
 
   const { locations, name: floorName } = data.floor;
+
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <CircularProgress />
+      </div>
+    );
 
   return (
     <div>
@@ -102,7 +133,76 @@ export const FloorView = () => {
           <p className="text-[8px] bg-[#84B067] text-white rounded-md px-1 py-1 w-fit">
             Floor
           </p>
-          <p className="text-2xl font-bold">{floorName}</p>
+          <div className="text-2xl font-bold flex flex-row gap-2 items-center justify-start">
+            {isEditingFloorName ? (
+              <TextField
+                autoFocus
+                variant="standard"
+                size="small"
+                sx={{
+                  width: "80%",
+                }}
+                value={newFloorName}
+                onChange={(e) => setNewFloorName(e.target.value)}
+                placeholder="Enter floor name"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmitNewFloorName();
+                  }
+                }}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <>
+                        <IconButton
+                          onClick={() => {
+                            setIsEditingFloorName(false);
+                            setNewFloorName(data?.floor?.name ?? "");
+                          }}
+                          disableRipple
+                        >
+                          <CloseIcon
+                            sx={{
+                              fontSize: "16px",
+                              cursor: "pointer",
+                              color: "red",
+                            }}
+                          />
+                        </IconButton>
+                        <IconButton
+                          onClick={handleSubmitNewFloorName}
+                          disableRipple
+                          disabled={!newFloorName.trim()}
+                        >
+                          <CheckIcon
+                            sx={{
+                              fontSize: "16px",
+                              cursor: "pointer",
+                              color: "green",
+                            }}
+                          />
+                        </IconButton>
+                      </>
+                    ),
+                  },
+                }}
+              />
+            ) : (
+              floorName
+            )}
+            {!isEditingFloorName && (
+              <span>
+                <ModeEditIcon
+                  onClick={() => setIsEditingFloorName(true)}
+                  sx={{
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    color: "#0000008a",
+                  }}
+                />
+              </span>
+            )}
+          </div>
           <p className="text-[10px]">
             <span className="text-gray-500">{`${locations.length} Location${locations.length > 1 || locations.length === 0 ? "s" : ""}`}</span>
           </p>
@@ -221,8 +321,8 @@ export const FloorView = () => {
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                setIsAddingLocation(false);
-                setNewLocationName("");
+                setIsEditingFloorName(false);
+                setNewFloorName(data?.floor?.name ?? "");
               }}
               variant="outlined"
               sx={{
