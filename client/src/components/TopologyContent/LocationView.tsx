@@ -13,18 +13,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   MenuItem,
   Select,
   TextField,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  DELETE_SPOT,
-  GET_LOCATION,
-  GET_TOPOLOGY,
-} from "../../graphql/queries/tenants";
+import { GET_LOCATION, GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import { Spot } from "./Partials.tsx/Spot";
 
 export const LocationView = () => {
   const { tenantId, locationId, floorId } = useParams();
@@ -43,9 +38,6 @@ export const LocationView = () => {
   });
 
   const [newLocationData, setNewLocationData] = useState({
-    // name: locationData?.location?.name,
-    // occupancy: locationData?.location?.occupancy,
-    // locationType: locationData?.location?.locationType,
     name: "",
     occupancy: "",
     locationType: "",
@@ -93,20 +85,6 @@ export const LocationView = () => {
 
   const handleAddSpot = () => {
     setIsAddingSpot(true);
-  };
-
-  const handleDeleteSpot = async (id: string) => {
-    try {
-      await client.mutate({
-        mutation: DELETE_SPOT,
-        variables: {
-          spotId: id,
-        },
-        refetchQueries: [GET_LOCATION],
-      });
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleSubmitNewSpot = async () => {
@@ -231,53 +209,7 @@ export const LocationView = () => {
             index % 2 === 0 ? "bg-gray-100" : ""
           }`}
         >
-          <p className="text-md text-black pl-3 mt-3 mb-3 text-center">
-            {spot.name}
-          </p>
-          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
-            {spot.id}
-          </p>
-          <p className="text-md text-blue-500 mt-3 mb-3 text-center">
-            {/* <Tooltip
-              title="Add Spot"
-              placement="top"
-              arrow
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, -10],
-                      },
-                    },
-                  ],
-                },
-              }}
-            >
-              <IconButton
-                aria-label="Add Location"
-                disableRipple
-                // onClick={handleAddLocation}
-                sx={{
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
-              >
-                <AddLocationIcon />
-              </IconButton>
-            </Tooltip> */}
-            <IconButton
-              aria-label="Add Location"
-              disableRipple
-              onClick={() => handleDeleteSpot(spot.id)}
-              sx={{
-                padding: 0,
-              }}
-            >
-              <DeleteIcon sx={{ color: "#d32f2f" }} />
-            </IconButton>
-          </p>
+          <Spot spot={spot} />
         </div>
       ))}
       {isAddingSpot ? (
