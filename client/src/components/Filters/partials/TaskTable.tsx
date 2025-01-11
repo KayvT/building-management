@@ -17,18 +17,17 @@ export default function TaskTable({ tasks }: TaskTableProps) {
     TaskTableProps["tasks"][0] | null
   >(null);
 
-
   return (
     <div className="flex flex-row justify-between items-center w-full">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="bg-gray-50 border-b">
-            <th className="p-3 text-left">Location</th>
-            <th className="p-3 text-left">State</th>
-            <th className="p-3 text-left">Created</th>
-            <th className="p-3 text-left">Due Date</th>
-            <th className="p-3 text-left">Priority</th>
-            <th className="p-3 text-left">Operative</th>
+          <tr className="bg-gray-400 border-b">
+            <th className="p-3 text-center text-white">Location</th>
+            <th className="p-3 text-center text-white">State</th>
+            <th className="p-3 text-center text-white">Created</th>
+            <th className="p-3 text-center text-white">Due Date</th>
+            <th className="p-3 text-center text-white">Priority</th>
+            <th className="p-3 text-center text-white">Operative</th>
           </tr>
         </thead>
         <tbody>
@@ -39,10 +38,10 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                 setSelectedTask(task);
                 setOpenTaskModal(true);
               }}
-              className="border-b hover:bg-gray-50 cursor-pointer"
+              className="border-b hover:bg-gray-200 transition-all duration-300 cursor-pointer"
             >
-              <td className="p-3">{task?.location?.name}</td>
-              <td className="p-3">
+              <td className="p-3 text-center">{task?.location?.name}</td>
+              <td className="p-3 text-center">
                 {task?.priority === "LOW" ? (
                   <span className="bg-green-500 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
                     {task?.priority}
@@ -61,11 +60,13 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                   </span>
                 )}
               </td>
-              <td className="p-3">
+              <td className="p-3 text-center">
                 {new Date(task?.createdAt).toLocaleString()}
               </td>
-              <td className="p-3">{new Date(task?.dueAt).toLocaleString()}</td>
-              <td className="p-3">
+              <td className="p-3 text-center">
+                {new Date(task?.dueAt).toLocaleString()}
+              </td>
+              <td className="p-3 text-center">
                 {task?.state === "OPEN" ? (
                   <span className="bg-green-700 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
                     CLOSED
@@ -76,7 +77,7 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                   </span>
                 )}
               </td>
-              <td className="p-3">
+              <td className="p-3 text-center">
                 <div>
                   {task?.operative?.id ? (
                     <span className="text-gray-600">{`${task?.operative?.name} || ${task?.operative?.id}`}</span>
