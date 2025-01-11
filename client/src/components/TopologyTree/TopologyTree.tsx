@@ -66,7 +66,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                   className="hover:text-blue-600 transition-all duration-300 
                  cursor-pointer hover:translate-y-[-2px] hover:font-bold"
                 >
-                  📍 {floor.name}
+                  🏗️ {floor.name}
                 </span>
               </div>
             </Link>
@@ -74,8 +74,8 @@ export const TopologyTreeView = ({ tree }: Props) => {
               <React.Fragment key={location.id}>
                 <Link
                   to={`/${tree.tenant.id}/topology/floors/${floor.id}/locations/${location.id}`}
-                  style={{ paddingLeft: "40px" }}
-                  className="flex items-center relative ml-2 pt-1 pb-1 cursor-pointer"
+                  className="flex items-center relative ml-2 pt-1 pb-1 pl-[40px]
+                  whitespace-nowrap cursor-pointer"
                 >
                   <div
                     className={`absolute left-0 top-0 h-full w-[2px] bg-gray-200 ${
@@ -89,7 +89,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                     className="hover:text-blue-600 transition-all duration-300 
                  cursor-pointer hover:translate-y-[-2px] hover:font-bold"
                   >
-                    🏢 {location.name}
+                    🎯 {location.name}
                   </span>
                 </Link>
                 {location.spots?.map((spot) => (
@@ -105,7 +105,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                       className="hover:text-blue-600 transition-all duration-300 
                  cursor-pointer hover:translate-y-[-2px] hover:font-bold"
                     >
-                      ⭐ {spot.name}
+                      📍 {spot.name}
                     </span>
                   </Link>
                 ))}
