@@ -23,10 +23,10 @@ export default function TaskTable({ tasks }: TaskTableProps) {
         <thead>
           <tr className="bg-gray-400 border-b">
             <th className="p-3 text-center text-white">Location</th>
-            <th className="p-3 text-center text-white">State</th>
+            <th className="p-3 text-center text-white">Priority</th>
             <th className="p-3 text-center text-white">Created</th>
             <th className="p-3 text-center text-white">Due Date</th>
-            <th className="p-3 text-center text-white">Priority</th>
+            <th className="p-3 text-center text-white">State</th>
             <th className="p-3 text-center text-white">Operative</th>
           </tr>
         </thead>
@@ -50,7 +50,7 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                   <span className="bg-yellow-500 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
                     {task?.priority}
                   </span>
-                ) : task?.priority === "HIGH" ? (
+                ) : task?.priority === "URGENT" ? (
                   <span className="bg-red-500 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
                     {task?.priority}
                   </span>
@@ -68,12 +68,12 @@ export default function TaskTable({ tasks }: TaskTableProps) {
               </td>
               <td className="p-3 text-center">
                 {task?.state === "OPEN" ? (
-                  <span className="bg-green-700 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
-                    CLOSED
+                  <span className="bg-[#ECFBF3] text-[#254C3A] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full border border-[#254C3A]">
+                    Open
                   </span>
                 ) : (
-                  <span className="bg-red-900 text-white text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">
-                    OPEN
+                  <span className="bg-[#FFF0EC] text-[#5F1908] text-xs font-medium me-2 px-2.5 py-0.5 rounded-full border border-[#5F1908]">
+                    CLOSED
                   </span>
                 )}
               </td>
