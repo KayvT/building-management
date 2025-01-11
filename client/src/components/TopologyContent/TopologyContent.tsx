@@ -1,29 +1,26 @@
-import { Box } from "@mui/material";
-
 import React, { useState } from "react";
-import { LocationSpot } from "../../types/Tenant";
+import { Box } from "@mui/material";
+import { FloorEntry, LocationEntry, SpotEntry } from "../../types/Tenant";
 import { TenantFloor } from "../../types/Tenant";
 import { FloorLocation } from "../../types/Tenant";
 import { IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { ADD_LOCATION } from "../../graphql/mutations/topology";
+import { ADD_LOCATION, ADD_SPOT } from "../../graphql/mutations/topology";
 import { useApolloClient } from "@apollo/client";
 import { GET_TOPOLOGY } from "../../graphql/queries/tenants";
-import { AddNewLocationButton } from "./AddNewLocationButton";
+import { AddNewBranchButton } from "./AddNewBranchButton";
+
 export const TopologyContent = ({
   selectedEntry,
 }: {
-  selectedEntry:
-    | ((TenantFloor | FloorLocation | LocationSpot) & {
-        type: "floor" | "location" | "spot";
-      })
-    | null;
+  selectedEntry: FloorEntry | LocationEntry | SpotEntry | null;
 }) => {
   const client = useApolloClient();
   const [isAddingLocation, setIsAddingLocation] = useState(false);
   const [newLocationName, setNewLocationName] = useState("");
-
+  const [newSpotName, setNewSpotName] = useState("");
+  const [isAddingSpot, setIsAddingSpot] = useState(false);
   const handleSubmitNewLocation = async () => {
     if (!newLocationName.trim()) return;
 
@@ -42,6 +39,150 @@ export const TopologyContent = ({
       setIsAddingLocation(false);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSubmitNewSpot = async () => {
+    if (!newSpotName.trim()) return;
+
+    try {
+      await client.mutate({
+        mutation: ADD_SPOT,
+        variables: {
+          locationId: selectedEntry?.id,
+          name: newSpotName.trim(),
+        },
+        refetchQueries: [GET_TOPOLOGY],
+      });
+      setNewSpotName("");
+      setIsAddingSpot(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleBranchContentView = (
+    selectedEntry: FloorEntry | LocationEntry | SpotEntry
+  ) => {
+    switch (selectedEntry.type) {
+      case "floor":
+        return (
+          <div>
+            {selectedEntry?.type === "floor" &&
+              (selectedEntry as TenantFloor)?.locations?.map(
+                (location, index) => (
+                  <div
+                    key={location.id}
+                    className={`grid grid-cols-3 gap-2 ${
+                      index % 2 === 0 ? "bg-gray-100" : ""
+                    }`}
+                  >
+                    <p className="text-md text-black pl-3 mt-3 mb-3">
+                      {location.name}
+                    </p>
+                    <p className="text-md text-gray-500 pl-3 mt-3 mb-3">
+                      {location.id}
+                    </p>
+                    <p className="text-md text-blue-500 mt-3 mb-3">
+                      <Tooltip
+                        title="Add Spot"
+                        placement="top"
+                        arrow
+                        slotProps={{
+                          popper: {
+                            modifiers: [
+                              {
+                                name: "offset",
+                                options: {
+                                  offset: [0, -10],
+                                },
+                              },
+                            ],
+                          },
+                        }}
+                      >
+                        <IconButton
+                          aria-label="Add Location"
+                          disableRipple
+                          // onClick={handleAddLocation}
+                          sx={{
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                          }}
+                        >
+                          <AddLocationIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <IconButton
+                        aria-label="Add Location"
+                        disableRipple
+                        //   onClick={handleAddLocation}
+                        sx={{
+                          padding: 0,
+                        }}
+                      >
+                        <DeleteIcon sx={{ color: "#d32f2f" }} />
+                      </IconButton>
+                    </p>
+                  </div>
+                )
+              )}
+
+            <AddNewBranchButton
+              caption="Add Location"
+              handleSubmitNewBranch={handleSubmitNewLocation}
+              isAddingBranch={isAddingLocation}
+              setIsAddingBranch={setIsAddingLocation}
+              newBranchName={newLocationName}
+              setNewBranchName={setNewLocationName}
+            />
+          </div>
+        );
+      case "location":
+        return (
+          <div>
+            {selectedEntry?.type === "location" &&
+              (selectedEntry as FloorLocation)?.spots?.map((spot, index) => (
+                <div
+                  key={spot.id}
+                  className={`grid grid-cols-3 gap-2 ${
+                    index % 2 === 0 ? "bg-gray-100" : ""
+                  }`}
+                >
+                  <p className="text-md text-black pl-3 mt-3 mb-3">
+                    {spot.name}
+                  </p>
+                  <p className="text-md text-gray-500 pl-3 mt-3 mb-3">
+                    {spot.id}
+                  </p>
+                  <p className="text-md text-blue-500 mt-3 mb-3">
+                    <IconButton
+                      aria-label="Add Location"
+                      disableRipple
+                      //   onClick={handleDeleteSpot}
+                      sx={{
+                        padding: 0,
+                      }}
+                    >
+                      <DeleteIcon sx={{ color: "#d32f2f" }} />
+                    </IconButton>
+                  </p>
+                </div>
+              ))}
+            <AddNewBranchButton
+              caption="Add Spot"
+              handleSubmitNewBranch={handleSubmitNewSpot}
+              isAddingBranch={isAddingSpot}
+              setIsAddingBranch={setIsAddingSpot}
+              newBranchName={newSpotName}
+              setNewBranchName={setNewSpotName}
+            />
+          </div>
+        );
+      case "spot":
+        return <div>Spot</div>;
+      default:
+        return <div>No content</div>;
     }
   };
 
@@ -80,92 +221,26 @@ export const TopologyContent = ({
                 {selectedEntry?.type === "location" && "Location"}
                 {selectedEntry?.type === "spot" && "Spot"}
               </p>
+
               {/* //need to view details of the selected entry based on what it is */}
             </div>
           </div>
-          {/* {console.log("## selectedEntry", selectedEntry)} */}
-          {selectedEntry?.type === "floor" && (
-            <div>
-              <p className="text-xl font-bold mb-4">All Locations</p>
-              <div className="grid grid-cols-3  gap-2 mb-4 ">
-                {["Location Name", "Location ID", "Options"].map((item) => (
-                  <p
-                    className="text-md text-black pl-2 mt-2 font-bold"
-                    key={item}
-                  >
-                    {item}
-                  </p>
-                ))}
-              </div>
-              {selectedEntry?.type === "floor" &&
-                (selectedEntry as TenantFloor)?.locations?.map(
-                  (location, index) => (
-                    <div
-                      key={location.id}
-                      className={`grid grid-cols-3 gap-2 ${
-                        index % 2 === 0 ? "bg-gray-100" : ""
-                      }`}
-                    >
-                      <p className="text-md text-black pl-3 mt-3 mb-3">
-                        {location.name}
-                      </p>
-                      <p className="text-md text-gray-500 pl-3 mt-3 mb-3">
-                        {location.id}
-                      </p>
-                      <p className="text-md text-blue-500 mt-3 mb-3">
-                        <Tooltip
-                          title="Add Spot"
-                          placement="top"
-                          arrow
-                          slotProps={{
-                            popper: {
-                              modifiers: [
-                                {
-                                  name: "offset",
-                                  options: {
-                                    offset: [0, -10],
-                                  },
-                                },
-                              ],
-                            },
-                          }}
-                        >
-                          <IconButton
-                            aria-label="Add Location"
-                            disableRipple
-                            // onClick={handleAddLocation}
-                            sx={{
-                              paddingTop: 0,
-                              paddingBottom: 0,
-                            }}
-                          >
-                            <AddLocationIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <IconButton
-                          aria-label="Add Location"
-                          disableRipple
-                          //   onClick={handleAddLocation}
-                          sx={{
-                            padding: 0,
-                          }}
-                        >
-                          <DeleteIcon sx={{ color: "#D11A2A" }} />
-                        </IconButton>
-                      </p>
-                    </div>
-                  )
-                )}
-
-              <AddNewLocationButton
-                handleSubmitNewLocation={handleSubmitNewLocation}
-                isAddingLocation={isAddingLocation}
-                setIsAddingLocation={setIsAddingLocation}
-                newLocationName={newLocationName}
-                setNewLocationName={setNewLocationName}
-              />
-            </div>
-          )}
+          <p className="text-xl font-bold mb-4">
+            {selectedEntry?.type === "floor" && "All Locations"}
+            {selectedEntry?.type === "location" && "All Spots"}
+          </p>
+          <div className="grid grid-cols-3  gap-2 mb-4 ">
+            {selectedEntry?.type !== "spot" &&
+              ["Location Name", "Location ID", "Options"].map((item) => (
+                <p
+                  className="text-md text-black pl-2 mt-2 font-bold"
+                  key={item}
+                >
+                  {item}
+                </p>
+              ))}
+          </div>
+          {handleBranchContentView(selectedEntry)}
         </div>
       ) : (
         <div className="flex flex-row gap-2 items-center justify-center h-full">
