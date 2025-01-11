@@ -171,10 +171,27 @@ export default function OperativesRoute() {
             </button>
           </div>
         </Box>
-        <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Add Operative</DialogTitle>
-          <DialogContent>
+        <Dialog
+          open={open}
+          onClose={() => setOpen(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle
+            sx={{
+              marginBottom: "1rem",
+            }}
+          >
+            Add Operative
+          </DialogTitle>
+          <DialogContent
+            className="flex flex-col gap-4"
+            sx={{
+              paddingTop: "0.5rem",
+            }}
+          >
             <TextField
+              variant="standard"
               label="Name"
               value={newOperative.name}
               onChange={(e) =>
@@ -182,6 +199,7 @@ export default function OperativesRoute() {
               }
             />
             <TextField
+              variant="standard"
               label="Code"
               value={newOperative.code}
               onChange={(e) =>
@@ -189,6 +207,7 @@ export default function OperativesRoute() {
               }
             />
             <Select
+              variant="standard"
               label="Is Human"
               value={newOperative.isHuman}
               onChange={(e) =>
