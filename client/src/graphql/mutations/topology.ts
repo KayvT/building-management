@@ -28,3 +28,31 @@ export const ADD_LOCATION = gql`
     }
   }
 `;
+
+export const ADD_SPOT = gql`
+  mutation AddSpot($locationId: ID!, $name: String!) {
+    createSpot(locationId: $locationId, name: $name) {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_FLOOR = gql`
+  query GetFloor($id: ID!) {
+    floor(id: $id) {
+      id
+      name
+      locations {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_LOCATION = gql`
+  mutation DeleteLocation($locationId: ID!) {
+    deleteLocation(locationId: $locationId)
+  }
+`;

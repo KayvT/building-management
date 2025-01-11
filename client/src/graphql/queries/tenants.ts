@@ -47,3 +47,28 @@ export const GET_ENTRY = gql`
     }
   }
 `;
+
+export const GET_LOCATION = gql`
+  query GetLocation($id: ID!) {
+    location(id: $id) {
+      id
+      name
+      spots {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_SPOT = gql`
+  mutation DeleteSpot($spotId: ID!) {
+    deleteSpot(spotId: $spotId)
+  }
+`;
+
+export const DELETE_FLOOR = gql`
+  mutation DeleteFloor($floorId: ID!) {
+    deleteFloor(floorId: $floorId)
+  }
+`;

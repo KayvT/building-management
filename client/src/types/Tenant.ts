@@ -22,3 +22,18 @@ export type LocationSpot = {
   id: string;
   name: string;
 };
+
+export type FloorEntry = TenantFloor & {
+  type: "floor";
+};
+
+export type LocationEntry = FloorLocation & {
+  type: "location";
+};
+
+export type SpotEntry = LocationSpot & {
+  type: "spot";
+};
+
+// 2) Combine them into a single union:
+export type TenantEntry = FloorEntry | LocationEntry | SpotEntry;
