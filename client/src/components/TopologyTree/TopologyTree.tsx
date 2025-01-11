@@ -41,7 +41,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
         backgroundColor: "white",
         borderRadius: "8px",
         width: "250px",
-        height: "800px",
+        height: "650px",
         overflowY: "auto",
         padding: "16px 8px 24px 24px",
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
