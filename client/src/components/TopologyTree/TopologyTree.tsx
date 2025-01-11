@@ -43,7 +43,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
         width: "250px",
         height: "800px",
         overflowY: "auto",
-        padding: "8px 24px 24px 24px",
+        padding: "16px 8px 24px 24px",
         boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
       }}
     >
@@ -130,17 +130,6 @@ export const TopologyTreeView = ({ tree }: Props) => {
           />
           <div className="flex gap-2">
             <Button
-              onClick={handleSubmitNewFloor}
-              variant="contained"
-              disabled={!newFloorName.trim()}
-              sx={{
-                borderRadius: "8px",
-                flex: 1,
-              }}
-            >
-              Confirm
-            </Button>
-            <Button
               onClick={() => {
                 setIsAddingFloor(false);
                 setNewFloorName("");
@@ -152,6 +141,17 @@ export const TopologyTreeView = ({ tree }: Props) => {
               }}
             >
               Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitNewFloor}
+              variant="contained"
+              disabled={!newFloorName.trim()}
+              sx={{
+                borderRadius: "8px",
+                flex: 1,
+              }}
+            >
+              Confirm
             </Button>
           </div>
         </div>

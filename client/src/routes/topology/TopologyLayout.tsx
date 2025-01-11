@@ -17,7 +17,7 @@ export default function TopologyLayout() {
       style={{
         display: "flex",
         maxWidth: "80%",
-        maxHeight: "800px",
+        height: "calc(100vh - 250px)",
         justifyContent: "center",
         alignItems: "center",
         margin: "48px auto",

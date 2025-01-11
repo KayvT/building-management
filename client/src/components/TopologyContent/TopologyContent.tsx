@@ -231,10 +231,11 @@ export const TopologyContent = ({
           </p>
           <div className="grid grid-cols-3  gap-2 mb-4 ">
             {selectedEntry?.type !== "spot" &&
-              ["Location Name", "Location ID", "Options"].map((item) => (
-                <p
-                  className="text-md text-black pl-2 mt-2 font-bold"
-                  key={item}
+              ["Location Name", "Location ID", "Status", "Total Spots", "Options"].map(
+                (item) => (
+                  <p
+                    className="text-md text-black pl-2 mt-2 font-bold"
+                    key={item}
                 >
                   {item}
                 </p>
