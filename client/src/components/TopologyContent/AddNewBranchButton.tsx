@@ -2,45 +2,46 @@ import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import React from "react";
 
-export const AddNewLocationButton = ({
-  handleSubmitNewLocation,
-  isAddingLocation,
-  setIsAddingLocation,
-  newLocationName,
-  setNewLocationName,
+export const AddNewBranchButton = ({
+  caption,
+  handleSubmitNewBranch,
+  isAddingBranch,
+  setIsAddingBranch,
+  newBranchName,
+  setNewBranchName,
 }) => {
-  const handleAddLocation = () => {
-    setIsAddingLocation(true);
+  const handleAddBranch = () => {
+    setIsAddingBranch(true);
   };
   return (
     <>
-      {isAddingLocation && (
+      {isAddingBranch && (
         <div className="grid grid-cols-3 gap-2 mt-2">
           <TextField
             autoFocus
             size="small"
-            value={newLocationName}
-            onChange={(e) => setNewLocationName(e.target.value)}
+            value={newBranchName}
+            onChange={(e) => setNewBranchName(e.target.value)}
             placeholder="Enter location name"
-            onKeyPress={(e) => {
+            onKeyUp={(e) => {
               if (e.key === "Enter") {
-                handleSubmitNewLocation();
+                handleSubmitNewBranch();
               }
             }}
           />
           <div className="col-span-2 flex gap-2">
             <Button
-              onClick={handleSubmitNewLocation}
+              onClick={handleSubmitNewBranch}
               variant="contained"
-              disabled={!newLocationName.trim()}
+              disabled={!newBranchName.trim()}
               size="small"
             >
               Confirm
             </Button>
             <Button
               onClick={() => {
-                setIsAddingLocation(false);
-                setNewLocationName("");
+                setIsAddingBranch(false);
+                setNewBranchName("");
               }}
               variant="outlined"
               size="small"
@@ -52,7 +53,7 @@ export const AddNewLocationButton = ({
       )}
 
       <Button
-        onClick={handleAddLocation}
+        onClick={handleAddBranch}
         disableRipple
         variant="outlined"
         disableTouchRipple
@@ -62,7 +63,7 @@ export const AddNewLocationButton = ({
           width: "100%",
         }}
       >
-        Add Location
+        {caption}
       </Button>
     </>
   );
