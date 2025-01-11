@@ -15,10 +15,6 @@ export default function RoutesWrapper() {
           path="floors/:floorId/locations/:locationId"
           element={<LocationView />}
         />
-        <Route
-          path="floors/:floorId/locations/:locationId/spots/:spotId"
-          element={<div>Spot View</div>}
-        />
       </Route>
       <Route path="/:tenantId/tasks" element={<TasksRoute />} />
       <Route path="/:tenantId/operatives" element={<OperativesRoute />} />
