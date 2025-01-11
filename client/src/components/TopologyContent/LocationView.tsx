@@ -148,8 +148,7 @@ export const LocationView = () => {
     );
 
   const { spots, name: locationName, locationType } = locationData.location;
-  console.log("ORIGINAL", locationData);
-  console.log("NEW", newLocationData);
+
   return (
     <div>
       <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
@@ -297,17 +296,6 @@ export const LocationView = () => {
           />
           <div className="flex gap-2">
             <Button
-              onClick={handleSubmitNewSpot}
-              variant="contained"
-              disabled={!newSpotName.trim()}
-              sx={{
-                borderRadius: "8px",
-                flex: 1,
-              }}
-            >
-              Confirm
-            </Button>
-            <Button
               onClick={() => {
                 setIsAddingSpot(false);
                 setNewSpotName("");
@@ -319,6 +307,17 @@ export const LocationView = () => {
               }}
             >
               Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitNewSpot}
+              variant="contained"
+              disabled={!newSpotName.trim()}
+              sx={{
+                borderRadius: "8px",
+                flex: 1,
+              }}
+            >
+              Confirm
             </Button>
           </div>
         </div>
@@ -386,8 +385,16 @@ export const LocationView = () => {
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleUpdateLocation}>Update</Button>
+          <Button variant="outlined" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleUpdateLocation}
+            disabled={!newLocationData.name?.trim()}
+          >
+            Confirm
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

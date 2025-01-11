@@ -220,17 +220,6 @@ export const FloorView = () => {
           />
           <div className="flex gap-2">
             <Button
-              onClick={handleSubmitNewLocation}
-              variant="contained"
-              disabled={!newLocationName.trim()}
-              sx={{
-                borderRadius: "8px",
-                flex: 1,
-              }}
-            >
-              Confirm
-            </Button>
-            <Button
               onClick={() => {
                 setIsAddingLocation(false);
                 setNewLocationName("");
@@ -242,6 +231,17 @@ export const FloorView = () => {
               }}
             >
               Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitNewLocation}
+              variant="contained"
+              disabled={!newLocationName.trim()}
+              sx={{
+                borderRadius: "8px",
+                flex: 1,
+              }}
+            >
+              Confirm
             </Button>
           </div>
         </div>
