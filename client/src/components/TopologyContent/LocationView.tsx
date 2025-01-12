@@ -230,11 +230,6 @@ export const LocationView = () => {
             </div>
           </div>
           <div className="flex flex-col items-end justify-center gap-1">
-            <div className="text-gray-500 text-md mb-1 flex flex-row gap-6 justify-between w-full">
-              {/* <p>
-              <span className="font-bold">ID:</span> <span>{locationId}</span>
-            </p> */}
-            </div>
             <Button
               variant="contained"
               color="primary"
