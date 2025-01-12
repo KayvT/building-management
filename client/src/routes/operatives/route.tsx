@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   CircularProgress,
@@ -19,8 +19,11 @@ import {
   GET_OPERATIVES_DETAILS,
 } from "../../graphql/queries/operatives";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Operative } from "@/types/operative";
 export default function OperativesRoute() {
-  const { data, loading, error } = useQuery(GET_OPERATIVES_DETAILS);
+  const { data, loading, error } = useQuery<{ tenant: { operatives: Operative[] } }>(
+    GET_OPERATIVES_DETAILS
+  );
   const [open, setOpen] = useState(false);
   const [newOperative, setNewOperative] = useState({
     name: "",

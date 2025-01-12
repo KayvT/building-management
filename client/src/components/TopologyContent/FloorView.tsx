@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -20,6 +20,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddLocationIcon from "@mui/icons-material/AddLocation";
 import { DELETE_FLOOR, GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import { Floor } from "@/types/floors";
 
 export const FloorView = () => {
   const [isAddingLocation, setIsAddingLocation] = useState(false);
@@ -30,7 +31,7 @@ export const FloorView = () => {
   const client = useApolloClient();
   const navigate = useNavigate();
 
-  const { data, loading } = useQuery(GET_FLOOR, {
+  const { data, loading } = useQuery<{ floor: Floor }>(GET_FLOOR, {
     variables: {
       id: floorId,
     },

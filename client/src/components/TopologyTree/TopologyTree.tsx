@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TenantData } from "../../types/Tenant";
+import { TenantData } from "../../types/tenant";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Box, Button, TextField } from "@mui/material";
 import { ADD_FLOOR } from "../../graphql/mutations/topology";

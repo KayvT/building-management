@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ADD_SPOT,
   DELETE_LOCATION,
@@ -20,6 +20,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { GET_LOCATION, GET_TOPOLOGY } from "../../graphql/queries/tenants";
 import { Spot } from "./Partials.tsx/Spot";
+import { Location } from "@/types/floors";
 
 export const LocationView = () => {
   const { tenantId, locationId, floorId } = useParams();
@@ -30,14 +31,17 @@ export const LocationView = () => {
 
   const client = useApolloClient();
 
-  const { data: locationData, loading } = useQuery(GET_LOCATION, {
-    variables: {
-      id: locationId,
-    },
-    pollInterval: 10000,
-  });
+  const { data: locationData, loading } = useQuery<{ location: Location }>(
+    GET_LOCATION,
+    {
+      variables: {
+        id: locationId,
+      },
+      pollInterval: 10000,
+    }
+  );
 
-  const [newLocationData, setNewLocationData] = useState({
+  const [newLocationData, setNewLocationData] = useState<Partial<Location>>({
     name: "",
     occupancy: "",
     locationType: "",

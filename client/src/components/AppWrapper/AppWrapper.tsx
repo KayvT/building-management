@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ReactNode } from "react";
 import { useTenant } from "../../contexts/useTenant";
 import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";

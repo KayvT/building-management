@@ -1,4 +1,3 @@
-import React from "react";
 import { TenantProvider } from "./src/contexts/TenantProvider";
 import RoutesWrapper from "./src/components/RoutesWrapper/RoutesWrapper";
 import AppWrapper from "./src/components/AppWrapper/AppWrapper";

@@ -4,13 +4,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState } from "react";
+import { useState } from "react";
 import { UPDATE_SPOT } from "../../../graphql/mutations/topology";
 import { useApolloClient } from "@apollo/client";
 import { DELETE_SPOT } from "../../../graphql/queries/tenants";
 import { GET_LOCATION } from "../../../graphql/queries/tenants";
+import { LocationSpot } from "@/types/tenant";
 
-export const Spot = ({ spot }: { spot: { id: string; name: string } }) => {
+type SpotProps = {
+  spot: LocationSpot;
+};
+
+export const Spot = ({ spot }: SpotProps) => {
   const [isEditingSpotName, setIsEditingSpotName] = useState(false);
   const [newSpotName, setNewSpotName] = useState(spot.name ?? "");
   const client = useApolloClient();

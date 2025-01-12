@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { GET_TASKS } from "../../graphql/queries/tasks";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   GET_LOCATIONS,
   GET_OPERATIVES,
@@ -19,6 +19,8 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
 import { CREATE_TASK } from "../../graphql/mutations/tasks";
+import { Floors } from "@/types/floors";
+import { TenantData } from "@/types/tenant";
 
 type AddTaskDialogProps = {
   open: boolean;
@@ -31,8 +33,8 @@ export default function AddTaskDialog({
   setOpenTaskModal,
   onClose,
 }: AddTaskDialogProps) {
-  const { data, loading } = useQuery(GET_OPERATIVES);
-  const { data: locationsData } = useQuery(GET_LOCATIONS);
+  const { data, loading } = useQuery<{ tenant: TenantData }>(GET_OPERATIVES);
+  const { data: locationsData } = useQuery<{ floors: Floors }>(GET_LOCATIONS);
 
   console.log("###", locationsData);
   const client = useApolloClient();
