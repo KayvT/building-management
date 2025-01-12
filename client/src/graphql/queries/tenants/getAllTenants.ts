@@ -8,3 +8,17 @@ export const GET_ALL_TENANTS = gql`
     }
   }
 `;
+
+export const GET_TENANT = gql`
+  query GetTenant {
+    tenant {
+      floors {
+        name
+        id
+        locations {
+          id
+        }
+      }
+    }
+  }
+`;
