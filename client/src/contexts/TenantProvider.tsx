@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { TenantContext } from "./TenantContext";
 
 export function TenantProvider({ children }: { children: ReactNode }) {

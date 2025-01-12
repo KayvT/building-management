@@ -11,8 +11,8 @@ export const InputLabel = ({ label }: InputLabelProps) => {
         color: "grey",
         fontWeight: "bold",
         marginBottom: "4px",
-        paddingLeft: "4px",
-        fontSize: "10px",
+        fontSize: "16px",
+        textTransform: "capitalize",
       }}
     >
       {label}
