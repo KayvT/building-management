@@ -6,7 +6,7 @@ type Props = {
   floors: Floor[];
 };
 export const TreeView = ({ floors }: Props) => {
-  const { tenantId } = useParams();
+  const { tenantId, floorId, locationId } = useParams();
   return (
     <>
       {floors?.map((floor) => (
@@ -20,8 +20,10 @@ export const TreeView = ({ floors }: Props) => {
             <div className="absolute left-0 top-1/2 w-5 h-[2px] bg-gray-200" />
             <div className="flex flex-row gap-2 items-center justify-between w-full">
               <span
-                className="hover:text-blue-600 truncate ... transition-all duration-300 
-                 cursor-pointer hover:translate-y-[-2px] hover:font-bold"
+                className={`hover:text-blue-600 truncate ... transition-all duration-300 
+                 cursor-pointer hover:translate-y-[-2px] hover:font-bold ${
+                   floorId === floor.id ? "font-bold" : ""
+                 }`}
               >
                 🏗️ {floor.name}
               </span>
@@ -41,8 +43,10 @@ export const TreeView = ({ floors }: Props) => {
                 />
                 <div className="absolute left-0 top-1/2 w-8 h-[2px] bg-gray-200" />
                 <span
-                  className="hover:text-blue-600 transition-all duration-300 
-                 cursor-pointer hover:translate-y-[-2px] hover:font-bold truncate ..."
+                  className={`hover:text-blue-600 transition-all duration-300 
+                 cursor-pointer hover:translate-y-[-2px] hover:font-bold truncate ... ${
+                   locationId === location.id ? "font-bold" : ""
+                 }`}
                 >
                   🎯 {location.name}
                 </span>
