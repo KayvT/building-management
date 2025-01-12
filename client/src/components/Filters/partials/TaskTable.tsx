@@ -98,7 +98,7 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                         }}
                       >
                         <div className="text-white font-bold">
-                          {task?.operative?.name?.charAt(0).toUpperCase()}
+                          {task?.operative?.name?.slice(0, 2).toUpperCase()}
                         </div>
                       </div>
                     ) : (

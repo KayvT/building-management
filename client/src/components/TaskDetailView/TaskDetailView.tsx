@@ -179,7 +179,7 @@ export const TaskDetailView = () => {
                           }}
                         >
                           <div className="text-white text-lg">
-                            {operative?.name?.charAt(0).toUpperCase()}
+                            {operative?.name?.slice(0, 2).toUpperCase()}
                           </div>
                         </div>
                         <span className="ml-2">{operative?.name}</span>

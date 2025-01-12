@@ -118,14 +118,14 @@ export default function OperativesRoute() {
             gap: "1rem",
           }}
         >
-          <div className="flex flex-row gap-2 flex-wrap justify-center">
+          <div className="flex flex-row gap-2 flex-wrap">
             {operatives?.map((operative) => (
               <div className="w-full max-w-xs p-4 bg-white rounded-lg shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-[#C5097C] flex items-center justify-center">
                       <div className="text-white font-bold">
-                        {operative.name?.charAt(0).toUpperCase()}
+                        {operative.name?.slice(0,2).toUpperCase()}
                       </div>
                     </div>
                     <span className="font-semibold text-gray-700">
