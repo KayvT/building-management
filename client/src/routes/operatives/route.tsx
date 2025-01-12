@@ -32,7 +32,19 @@ export default function OperativesRoute() {
   });
   const client = useApolloClient();
 
-  if (!data || loading) return <CircularProgress />;
+  if (!data || loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "calc(100vh - 250px)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   const { operatives } = data.tenant;
@@ -125,7 +137,7 @@ export default function OperativesRoute() {
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[#C5097C] flex items-center justify-center">
                       <div className="text-white font-bold">
-                        {operative.name?.slice(0,2).toUpperCase()}
+                        {operative.name?.slice(0, 2).toUpperCase()}
                       </div>
                     </div>
                     <span className="font-semibold text-gray-700">
