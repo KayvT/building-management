@@ -87,7 +87,19 @@ export default function TasksLayout() {
     });
   };
 
-  if (loading) return <CircularProgress />;
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "calc(100vh - 250px)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>

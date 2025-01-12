@@ -10,7 +10,19 @@ export default function TopologyLayout() {
   const path = useLocation();
   const isEmptyView = path.pathname === `/${tenantId}/topology`;
 
-  if (loading) return <CircularProgress />;
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          height: "calc(100vh - 250px)",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
   return (
     <div
       style={{
