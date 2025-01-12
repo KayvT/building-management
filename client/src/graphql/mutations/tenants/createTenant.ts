@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const createTenant = gql`
+export const CREATE_TENANT = gql`
   mutation CreateTenant($name: String!) {
     createTenant(name: $name) {
       name

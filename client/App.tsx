@@ -1,8 +1,8 @@
-import { TenantProvider } from "./src/contexts/TenantProvider";
+import { TenantProvider } from "./src/contexts/TenantIdContext/TenantProvider";
 import RoutesWrapper from "./src/components/RoutesWrapper/RoutesWrapper";
 import AppWrapper from "./src/components/AppWrapper/AppWrapper";
 import NavigationHeader from "./src/components/navigation/Navigation";
-import { TenantApolloProvider } from "./src/components/TenantApolloProvider";
+import { TenantApolloProvider } from "./src/contexts/ApolloClientProvider/TenantApolloProvider";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Slide, ToastContainer } from "react-toastify";
