@@ -9,8 +9,11 @@ import {
   GET_TASKS,
 } from "../graphql/queries/tasks";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const TaskDetailView = () => {
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
   const { taskId, tenantId } = useParams();
   const { data: operatives } = useQuery(GET_OPERATIVES);
   const navigate = useNavigate();
@@ -38,7 +41,7 @@ export const TaskDetailView = () => {
     });
 
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: ASSIGN_TASK,
         variables: {
           taskId: taskId,
@@ -46,6 +49,10 @@ export const TaskDetailView = () => {
         },
         refetchQueries: [GET_TASKS],
       });
+      notify(
+        `Task assigned to ${data?.assignTask?.operative?.name} successfully`,
+        "success"
+      );
     } catch (error) {
       console.error(error);
     }
@@ -61,7 +68,8 @@ export const TaskDetailView = () => {
         },
         refetchQueries: [GET_TASKS],
       });
-      setTaskAssignedOperative({ id: null, name: null });
+      setTaskAssignedOperative(null);
+      notify("Task unassigned successfully", "success");
     } catch (error) {
       console.error(error);
     }
@@ -74,6 +82,7 @@ export const TaskDetailView = () => {
         variables: { taskId: taskId },
         refetchQueries: [GET_TASKS],
       });
+      notify("Task closed successfully", "success");
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +90,6 @@ export const TaskDetailView = () => {
 
   return (
     <Drawer open={Boolean(taskId)} onClose={handleClose} anchor="right">
-      {/* {console.log("#### SELECTED TASK", selectedTask)} */}
       <div className="p-6 w-[400px] h-full flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <div>

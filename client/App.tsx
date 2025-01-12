@@ -5,6 +5,7 @@ import NavigationHeader from "./src/components/navigation/Navigation";
 import { TenantApolloProvider } from "./src/components/TenantApolloProvider";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Slide, ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -17,6 +18,14 @@ function App() {
           </AppWrapper>
         </TenantApolloProvider>
       </TenantProvider>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2000}
+        theme="colored"
+        transition={Slide}
+        pauseOnHover={false}
+        closeButton={true}
+      />
     </LocalizationProvider>
   );
 }

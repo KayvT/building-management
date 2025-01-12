@@ -21,6 +21,8 @@ import { Dayjs } from "dayjs";
 import { CREATE_TASK } from "../../graphql/mutations/tasks";
 import { Floors } from "@/types/floors";
 import { TenantData } from "@/types/tenant";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 type AddTaskDialogProps = {
   open: boolean;
@@ -35,8 +37,10 @@ export default function AddTaskDialog({
 }: AddTaskDialogProps) {
   const { data, loading } = useQuery<{ tenant: TenantData }>(GET_OPERATIVES);
   const { data: locationsData } = useQuery<{ floors: Floors }>(GET_LOCATIONS);
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
+  const navigate = useNavigate();
 
-  console.log("###", locationsData);
   const client = useApolloClient();
   const [newTask, setNewTask] = useState<{
     priority: string;
@@ -54,7 +58,7 @@ export default function AddTaskDialog({
 
   const handleAddNewTask = async () => {
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: CREATE_TASK,
         variables: {
           locationId: newTask.locationId,
@@ -66,14 +70,37 @@ export default function AddTaskDialog({
         },
         refetchQueries: [GET_TASKS],
       });
-      setOpenTaskModal(false);
+      if (data?.createTask?.id) {
+        notify("Task added successfully", "success");
+        setOpenTaskModal(false);
+        navigate(`/topology/tasks/${data?.createTask?.id}`);
+        setNewTask({
+          priority: "",
+          operativeId: "",
+          dueAt: null,
+          locationId: "",
+        });
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={() => {
+        onClose();
+        setNewTask({
+          priority: "",
+          operativeId: "",
+          dueAt: null,
+          locationId: "",
+        });
+      }}
+      fullWidth
+      maxWidth="sm"
+    >
       <DialogTitle>Add Task</DialogTitle>
       <DialogContent className="flex flex-col gap-4 w-full">
         <div>

@@ -26,6 +26,7 @@ import {
   getLocationHighestPriority,
   getPriorityColor,
 } from "../../utils/locationUtils";
+import { toast } from "react-toastify";
 
 export const LocationView = () => {
   const { tenantId, locationId, floorId } = useParams();
@@ -33,7 +34,8 @@ export const LocationView = () => {
   const [isAddingSpot, setIsAddingSpot] = useState(false);
   const [newSpotName, setNewSpotName] = useState("");
   const [open, setOpen] = useState(false);
-
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
   const client = useApolloClient();
 
   const { data: locationData, loading } = useQuery<{ location: Location }>(
@@ -65,14 +67,23 @@ export const LocationView = () => {
 
   const handleDeleteLocation = async () => {
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: DELETE_LOCATION,
         variables: {
           locationId: locationId,
         },
         refetchQueries: [GET_FLOOR, GET_TOPOLOGY],
       });
-      navigate(`/${tenantId}/topology/floors/${floorId}`);
+
+      if (!data.deleteLocation) {
+        notify(
+          "You cannot delete this location because it has open tasks.",
+          "error"
+        );
+      } else {
+        notify("Location deleted successfully", "success");
+        navigate(`/${tenantId}/topology/floors/${floorId}`);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -92,6 +103,7 @@ export const LocationView = () => {
         },
         refetchQueries: [GET_LOCATION, GET_FLOOR],
       });
+      notify("Location updated successfully", "success");
       setOpen(false);
       setNewLocationData({
         name: locationData?.location?.name,
@@ -119,6 +131,7 @@ export const LocationView = () => {
         },
         refetchQueries: [GET_LOCATION],
       });
+      notify("Spot added successfully", "success");
       setNewSpotName("");
       setIsAddingSpot(false);
     } catch (error) {
@@ -145,7 +158,11 @@ export const LocationView = () => {
       </div>
     );
 
-  const { spots, name: locationName, locationType } = locationData.location;
+  const {
+    spots = [],
+    name: locationName,
+    locationType,
+  } = locationData.location;
 
   return (
     <div>
@@ -172,7 +189,7 @@ export const LocationView = () => {
             <p className="text-sm">
               <span
                 className={`${
-                  newLocationData.occupancy === "OCCUPIED"
+                  locationData.location.occupancy === "OCCUPIED"
                     ? "text-green-500"
                     : "text-red-500"
                 } flex flex-row items-center justify-start gap-1`}
@@ -180,20 +197,20 @@ export const LocationView = () => {
                 <span className="relative flex h-3 w-3">
                   <span
                     className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
-                      newLocationData.occupancy === "OCCUPIED"
+                      locationData.location.occupancy === "OCCUPIED"
                         ? "bg-green-400"
                         : "bg-red-400"
                     } opacity-75`}
                   ></span>
                   <span
                     className={`relative inline-flex rounded-full h-3 w-3 ${
-                      newLocationData.occupancy === "OCCUPIED"
+                      locationData.location.occupancy === "OCCUPIED"
                         ? "bg-green-500"
                         : "bg-red-500"
                     }`}
                   ></span>
                 </span>
-                {newLocationData.occupancy}
+                {locationData.location.occupancy}
               </span>
             </p>
           </div>
@@ -235,16 +252,22 @@ export const LocationView = () => {
           </p>
         ))}
       </div>
-      {spots?.map((spot, index) => (
-        <div
-          key={spot.id}
-          className={`grid grid-cols-3 gap-2 ${
-            index % 2 === 0 ? "bg-gray-100" : ""
-          }`}
-        >
-          <Spot spot={spot} />
-        </div>
-      ))}
+      {spots?.length > 0 ? (
+        spots?.map((spot, index) => (
+          <div
+            key={spot.id}
+            className={`grid grid-cols-3 gap-2 ${
+              index % 2 === 0 ? "bg-gray-100" : ""
+            }`}
+          >
+            <Spot spot={spot} />
+          </div>
+        ))
+      ) : (
+        <p className="text-md text-black pl-2 mt-2 font-bold text-center">
+          No spots found
+        </p>
+      )}
       {isAddingSpot ? (
         <div className="mt-4 flex flex-col gap-2">
           <TextField

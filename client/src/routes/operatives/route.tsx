@@ -20,10 +20,13 @@ import {
 } from "../../graphql/queries/operatives";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Operative } from "@/types/operative";
+import { toast } from "react-toastify";
 export default function OperativesRoute() {
-  const { data, loading, error } = useQuery<{ tenant: { operatives: Operative[] } }>(
-    GET_OPERATIVES_DETAILS
-  );
+  const { data, loading, error } = useQuery<{
+    tenant: { operatives: Operative[] };
+  }>(GET_OPERATIVES_DETAILS);
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
   const [open, setOpen] = useState(false);
   const [newOperative, setNewOperative] = useState({
     name: "",
@@ -31,7 +34,6 @@ export default function OperativesRoute() {
     isHuman: true,
   });
   const client = useApolloClient();
-  console.log(data);
 
   if (!data || loading) return <CircularProgress />;
   if (error) return <div>Error: {error.message}</div>;
@@ -39,20 +41,28 @@ export default function OperativesRoute() {
   const { operatives } = data.tenant;
 
   const handleDeleteOperative = async (id: string) => {
-    console.log("delete operative", id);
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: DELETE_OPERATIVE,
         variables: { operativeId: id },
         refetchQueries: [GET_OPERATIVES_DETAILS],
       });
+      if (!data.deleteOperative) {
+        toast(
+          "You cannot delete this operative because they have open tasks.",
+          {
+            type: "error",
+          }
+        );
+      } else {
+        toast("Operative deleted successfully", { type: "success" });
+      }
     } catch (error) {
       console.error("Error deleting operative", error);
     }
   };
 
   const handleAddOperative = async () => {
-    console.log("add operative");
     try {
       await client.mutate({
         mutation: ADD_OPERATIVE,
@@ -63,6 +73,7 @@ export default function OperativesRoute() {
         },
         refetchQueries: [GET_OPERATIVES_DETAILS],
       });
+      notify("Operative added successfully", "success");
       setOpen(false);
       setNewOperative({
         name: "",

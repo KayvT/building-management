@@ -12,6 +12,7 @@ import {
 import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { toast } from "react-toastify";
 
 import { DELETE_FLOOR, GET_TOPOLOGY } from "../../graphql/queries/tenants";
 import { Floor } from "@/types/floors";
@@ -24,6 +25,8 @@ export const FloorView = () => {
   const { floorId, tenantId } = useParams();
   const client = useApolloClient();
   const navigate = useNavigate();
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
 
   const { data, loading } = useQuery<{ floor: Floor }>(GET_FLOOR, {
     variables: {
@@ -43,13 +46,22 @@ export const FloorView = () => {
 
   const handleDeleteLocation = async (id: string) => {
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: DELETE_LOCATION,
         variables: {
           locationId: id,
         },
         refetchQueries: [GET_FLOOR],
       });
+      if (!data?.deleteLocation) {
+        notify(
+          "You cannot delete this location because it has open tasks.",
+          "error"
+        );
+      } else {
+        notify("Location deleted successfully", "success");
+        navigate(`/${tenantId}/topology/floors/${floorId}`);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -57,14 +69,22 @@ export const FloorView = () => {
 
   const handleDeleteFloor = async () => {
     try {
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: DELETE_FLOOR,
         variables: {
           floorId: floorId,
         },
         refetchQueries: [GET_TOPOLOGY],
       });
-      navigate(`/${tenantId}/topology`);
+      if (!data.deleteFloor) {
+        notify(
+          "You cannot delete this floor because it has open tasks.",
+          "error"
+        );
+      } else {
+        notify("Floor deleted successfully", "success");
+        navigate(`/${tenantId}/topology`);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -213,10 +233,10 @@ export const FloorView = () => {
             variant="contained"
             color="error"
             size="small"
-            sx={{ fontSize: "10px" }}
+            sx={{ fontSize: "10px", textTransform: "none" }}
             onClick={handleDeleteFloor}
           >
-            DELETE FLOOR
+            Delete Floor
           </Button>
         </div>
       </div>

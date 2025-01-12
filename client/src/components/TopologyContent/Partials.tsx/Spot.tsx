@@ -10,6 +10,7 @@ import { useApolloClient } from "@apollo/client";
 import { DELETE_SPOT } from "../../../graphql/queries/tenants";
 import { GET_LOCATION } from "../../../graphql/queries/tenants";
 import { LocationSpot } from "@/types/tenant";
+import { toast } from "react-toastify";
 
 type SpotProps = {
   spot: LocationSpot;
@@ -19,6 +20,9 @@ export const Spot = ({ spot }: SpotProps) => {
   const [isEditingSpotName, setIsEditingSpotName] = useState(false);
   const [newSpotName, setNewSpotName] = useState(spot.name ?? "");
   const client = useApolloClient();
+  //TODO: if there is time, I should probably move this to a global content or hook or something
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
 
   const handleSubmitNewSpotName = async () => {
     if (!newSpotName.trim()) return;
@@ -32,6 +36,7 @@ export const Spot = ({ spot }: SpotProps) => {
         },
         refetchQueries: [GET_LOCATION],
       });
+      notify("Spot updated successfully", "success");
       setIsEditingSpotName(false);
       setNewSpotName(spot.name ?? "");
     } catch (error) {
@@ -48,6 +53,7 @@ export const Spot = ({ spot }: SpotProps) => {
         },
         refetchQueries: [GET_LOCATION],
       });
+      notify("Spot deleted successfully", "success");
     } catch (error) {
       console.error(error);
     }

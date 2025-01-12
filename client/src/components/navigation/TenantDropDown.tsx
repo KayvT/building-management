@@ -8,6 +8,7 @@ import AddTenantModal from "../AddTenantModal";
 import { Button, MenuItem, Menu } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { TenantData } from "@/types/tenant";
+import { toast } from "react-toastify";
 
 export default function TenantDropdown() {
   const { data } = useQuery<{ tenants: TenantData[] }>(GET_ALL_TENANTS);
@@ -15,8 +16,8 @@ export default function TenantDropdown() {
   const { setCurrentTenantId, currentTenantId } = useTenant();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  if (!data?.tenants?.length) return null;
+  const notify = (message: string, type: "success" | "error" | "info") =>
+    toast(message, { type });
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,6 +31,7 @@ export default function TenantDropdown() {
     setCurrentTenantId(tenantId);
     navigate(`/${tenantId}/topology`);
     handleMenuClose();
+    notify("Tenant changed successfully", "info");
   };
 
   const handleAddTenant = (e: React.MouseEvent) => {
@@ -38,6 +40,8 @@ export default function TenantDropdown() {
     setIsModalOpen(true);
     handleMenuClose();
   };
+
+  if (!data?.tenants?.length) return null;
 
   const currentTenant = data.tenants.find(
     (tenant) => tenant.id === currentTenantId

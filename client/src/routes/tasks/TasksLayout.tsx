@@ -12,6 +12,7 @@ import TaskTable from "../../components/Filters/partials/TaskTable";
 import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
 import { Outlet } from "react-router";
 import { GET_OPERATIVES } from "../../graphql/queries/operatives";
+
 export default function TasksLayout() {
   const [openTaskModal, setOpenTaskModal] = useState(false);
   const [filters, setFilters] = useState<{
@@ -141,7 +142,6 @@ export default function TasksLayout() {
                   marginTop: "32px",
                 }}
                 onClick={() => {
-                  console.log("add task");
                   setOpenTaskModal(true);
                 }}
               >
