@@ -32,8 +32,12 @@ export default function AddTaskDialog({
   setOpenTaskModal,
   onClose,
 }: AddTaskDialogProps) {
-  const { data, loading } = useQuery<{ tenant: TenantData }>(GET_OPERATIVES);
-  const { data: locationsData } = useQuery<{ floors: Floors }>(GET_LOCATIONS);
+  const { data, loading } = useQuery<{ tenant: TenantData }>(GET_OPERATIVES, {
+    skip: !open,
+  });
+  const { data: locationsData } = useQuery<{ floors: Floors }>(GET_LOCATIONS, {
+    skip: !open,
+  });
   const notify = (message: string, type: "success" | "error") =>
     toast(message, { type });
   const navigate = useNavigate();
