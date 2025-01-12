@@ -118,9 +118,13 @@ export const Spot = ({ spot }: SpotProps) => {
           }}
         />
       ) : (
-        <p className="text-md text-black  mt-3 mb-3 text-center">{spot.name}</p>
+        <p className="text-md text-gray-500  mt-3 mb-3 text-center">
+          {spot.id}
+        </p>
       )}
-      <p className="text-md text-gray-500  mt-3 mb-3 text-center">{spot.id}</p>
+      <p className="text-md text-black  mt-3 mb-3 text-center">
+        {spot.name}
+      </p>
       <p className="text-md text-blue-500 mt-3 mb-3 text-center">
         {!isEditingSpotName && (
           <span>

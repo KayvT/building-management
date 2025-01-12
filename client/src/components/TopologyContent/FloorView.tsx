@@ -17,6 +17,7 @@ import { GET_TOPOLOGY, GET_FLOOR } from "../../graphql/queries";
 import { Floor } from "@/types/floors";
 import { FloorLocation } from "./Partials.tsx/Location";
 
+const TABLE_HEADERS = ["ID", "Name", "Status", "Total Spots", "Options"];
 export const FloorView = () => {
   const [isAddingLocation, setIsAddingLocation] = useState(false);
   const [newLocationName, setNewLocationName] = useState("");
@@ -142,193 +143,195 @@ export const FloorView = () => {
     );
 
   return (
-    <div>
-      <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-[8px] bg-[#84B067] text-white rounded-md px-1 py-1 w-fit">
-            Floor
-          </p>
-          <div className="text-2xl font-bold flex flex-row gap-2 items-center justify-start">
-            {isEditingFloorName ? (
-              <TextField
-                autoFocus
-                variant="standard"
-                size="small"
-                sx={{
-                  width: "80%",
-                }}
-                value={newFloorName}
-                onChange={(e) => setNewFloorName(e.target.value)}
-                placeholder="Enter floor name"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSubmitNewFloorName();
-                  }
-                }}
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <>
-                        <IconButton
-                          onClick={() => {
-                            setIsEditingFloorName(false);
-                            setNewFloorName(data?.floor?.name ?? "");
-                          }}
-                          disableRipple
-                        >
-                          <CloseIcon
-                            sx={{
-                              fontSize: "16px",
-                              cursor: "pointer",
-                              color: "red",
-                            }}
-                          />
-                        </IconButton>
-                        <IconButton
-                          onClick={handleSubmitNewFloorName}
-                          disableRipple
-                          disabled={!newFloorName.trim()}
-                        >
-                          <CheckIcon
-                            sx={{
-                              fontSize: "16px",
-                              cursor: "pointer",
-                              color: "green",
-                            }}
-                          />
-                        </IconButton>
-                      </>
-                    ),
-                  },
-                }}
-              />
-            ) : (
-              floorName
-            )}
-            {!isEditingFloorName && (
-              <span>
-                <ModeEditIcon
-                  onClick={() => setIsEditingFloorName(true)}
+    <div className="flex flex-col justify-between h-full">
+      <div>
+        <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-[8px] bg-[#84B067] text-white rounded-md px-1 py-1 w-fit">
+              Floor
+            </p>
+            <div className="text-2xl font-bold flex flex-row gap-2 items-center justify-start">
+              {isEditingFloorName ? (
+                <TextField
+                  autoFocus
+                  variant="standard"
+                  size="small"
                   sx={{
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    color: "#0000008a",
+                    width: "80%",
+                  }}
+                  value={newFloorName}
+                  onChange={(e) => setNewFloorName(e.target.value)}
+                  placeholder="Enter floor name"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmitNewFloorName();
+                    }
+                  }}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <>
+                          <IconButton
+                            onClick={() => {
+                              setIsEditingFloorName(false);
+                              setNewFloorName(data?.floor?.name ?? "");
+                            }}
+                            disableRipple
+                          >
+                            <CloseIcon
+                              sx={{
+                                fontSize: "16px",
+                                cursor: "pointer",
+                                color: "red",
+                              }}
+                            />
+                          </IconButton>
+                          <IconButton
+                            onClick={handleSubmitNewFloorName}
+                            disableRipple
+                            disabled={!newFloorName.trim()}
+                          >
+                            <CheckIcon
+                              sx={{
+                                fontSize: "16px",
+                                cursor: "pointer",
+                                color: "green",
+                              }}
+                            />
+                          </IconButton>
+                        </>
+                      ),
+                    },
                   }}
                 />
-              </span>
-            )}
-          </div>
-          <p className="text-[10px]">
-            <span className="text-gray-500">{`${locations.length} Location${locations.length > 1 || locations.length === 0 ? "s" : ""}`}</span>
-          </p>
-        </div>
-        <div className="flex flex-col items-end justify-center gap-1">
-          <div className="text-gray-500 text-md mb-1 flex flex-row gap-6 justify-between w-full">
-            <p>
-              <span className="font-bold">ID:</span> {floorId}
+              ) : (
+                floorName
+              )}
+              {!isEditingFloorName && (
+                <span>
+                  <ModeEditIcon
+                    onClick={() => setIsEditingFloorName(true)}
+                    sx={{
+                      fontSize: "16px",
+                      cursor: "pointer",
+                      color: "#0000008a",
+                    }}
+                  />
+                </span>
+              )}
+            </div>
+            <p className="text-[10px]">
+              <span className="text-gray-500">{`${locations.length} Location${locations.length > 1 || locations.length === 0 ? "s" : ""}`}</span>
             </p>
           </div>
-
-          <Button
-            variant="contained"
-            color="error"
-            size="small"
-            sx={{ fontSize: "10px", textTransform: "none" }}
-            onClick={handleDeleteFloor}
-          >
-            Delete Floor
-          </Button>
-        </div>
-      </div>
-      <p className="text-xl font-bold mb-4">All Locations</p>
-      <div className="grid grid-cols-5  gap-2 mb-4 ">
-        {[
-          "Location Name",
-          "Location ID",
-          "Status",
-          "Total Spots",
-          "Options",
-        ].map((item) => (
-          <p
-            className="text-md text-black pl-2 mt-2 font-bold text-center"
-            key={item}
-          >
-            {item}
-          </p>
-        ))}
-      </div>
-      {locations?.map((location, index) => (
-        <div
-          key={location.id}
-          className={`grid grid-cols-5 gap-2 ${
-            index % 2 === 0 ? "bg-gray-100" : ""
-          }`}
-        >
-          <FloorLocation
-            location={location}
-            handleDeleteLocation={handleDeleteLocation}
-          />
-        </div>
-      ))}
-      {isAddingLocation ? (
-        <div className="mt-4 flex flex-col gap-2">
-          <TextField
-            autoFocus
-            size="small"
-            value={newLocationName}
-            onChange={(e) => setNewLocationName(e.target.value)}
-            placeholder="Enter floor name"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSubmitNewLocation();
-              }
-            }}
-          />
-          <div className="flex gap-2">
+          <div className="flex flex-col items-end justify-center gap-1">
             <Button
-              onClick={() => {
-                setIsEditingFloorName(false);
-                setNewFloorName(data?.floor?.name ?? "");
-              }}
-              variant="outlined"
-              sx={{
-                borderRadius: "8px",
-                flex: 1,
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmitNewLocation}
               variant="contained"
-              disabled={!newLocationName.trim()}
-              sx={{
-                borderRadius: "8px",
-                flex: 1,
-              }}
+              color="error"
+              size="small"
+              sx={{ fontSize: "10px", textTransform: "none" }}
+              onClick={handleDeleteFloor}
             >
-              Confirm
+              Delete Floor
             </Button>
           </div>
         </div>
-      ) : (
-        <Button
-          onClick={handleAddLocation}
-          disableRipple
-          variant="outlined"
-          disableTouchRipple
-          sx={{
-            marginTop: "16px",
-            borderRadius: "8px",
-            maxWidth: "80%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            display: "flex",
-          }}
-        >
-          Add Location
-        </Button>
-      )}
+        <p className="text-xl font-bold mb-4">All Locations</p>
+        <div className="grid grid-cols-5  gap-2 mb-4 ">
+          {TABLE_HEADERS.map((item) => (
+            <p
+              className="text-md text-black pl-2 mt-2 font-bold text-center"
+              key={item}
+            >
+              {item}
+            </p>
+          ))}
+        </div>
+        {locations?.length > 0 ? (
+          locations?.map((location, index) => (
+            <div
+              key={location.id}
+              className={`grid grid-cols-5 gap-2 ${
+                index % 2 === 0 ? "bg-gray-100" : ""
+              }`}
+            >
+              <FloorLocation
+                location={location}
+                handleDeleteLocation={handleDeleteLocation}
+              />
+            </div>
+          ))
+        ) : isAddingLocation ? (
+          <></>
+        ) : (
+          <p className="text-md text-black pl-2 mt-2 font-bold text-center">
+            No locations found
+          </p>
+        )}
+        {isAddingLocation ? (
+          <div className="mt-4 flex flex-col gap-2">
+            <TextField
+              autoFocus
+              size="small"
+              value={newLocationName}
+              onChange={(e) => setNewLocationName(e.target.value)}
+              placeholder="Enter location name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmitNewLocation();
+                }
+              }}
+            />
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  setIsAddingLocation(false);
+                  setNewLocationName("");
+                }}
+                variant="outlined"
+                sx={{
+                  borderRadius: "8px",
+                  flex: 1,
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmitNewLocation}
+                variant="contained"
+                disabled={!newLocationName.trim()}
+                sx={{
+                  borderRadius: "8px",
+                  flex: 1,
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button
+            onClick={handleAddLocation}
+            disableRipple
+            variant="outlined"
+            disableTouchRipple
+            sx={{
+              marginTop: "16px",
+              borderRadius: "8px",
+              maxWidth: "80%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "flex",
+            }}
+          >
+            Add Location
+          </Button>
+        )}
+      </div>
+      <p className="text-sm text-grey-50 pl-2 mt-2 text-right">
+        <span className="font-bold text-grey-50">ID:</span>{" "}
+        <span>{floorId}</span>
+      </p>
     </div>
   );
 };

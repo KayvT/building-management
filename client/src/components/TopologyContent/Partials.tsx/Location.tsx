@@ -12,11 +12,11 @@ export const FloorLocation = ({
 }: LocationProps) => {
   return (
     <>
-      <p className="text-md text-black pl-3 mt-3 mb-3 text-center">
-        {location.name}
-      </p>
       <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
         {location.id}
+      </p>
+      <p className="text-md text-black pl-3 mt-3 mb-3 text-center">
+        {location.name}
       </p>
       <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
         {location.occupancy}
