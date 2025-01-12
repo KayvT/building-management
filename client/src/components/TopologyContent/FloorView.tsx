@@ -9,16 +9,10 @@ import {
   GET_FLOOR,
   UPDATE_FLOOR,
 } from "../../graphql/mutations/topology";
-import {
-  Button,
-  CircularProgress,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
+
 import { DELETE_FLOOR, GET_TOPOLOGY } from "../../graphql/queries/tenants";
 import { Floor } from "@/types/floors";
 
@@ -262,36 +256,7 @@ export const FloorView = () => {
           <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
             {location.spots.length}
           </p>
-          <p className="text-md text-blue-500 mt-3 mb-3 text-center">
-            <Tooltip
-              title="Add Spot"
-              placement="top"
-              arrow
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, -10],
-                      },
-                    },
-                  ],
-                },
-              }}
-            >
-              <IconButton
-                aria-label="Add Location"
-                disableRipple
-                // onClick={handleAddLocation}
-                sx={{
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
-              >
-                <AddLocationIcon />
-              </IconButton>
-            </Tooltip>
+          <div className="text-md text-blue-500 mt-3 mb-3 text-center">
             <IconButton
               aria-label="Add Location"
               disableRipple
@@ -302,7 +267,7 @@ export const FloorView = () => {
             >
               <DeleteIcon sx={{ color: "#d32f2f", opacity: 0.8 }} />
             </IconButton>
-          </p>
+          </div>
         </div>
       ))}
       {isAddingLocation ? (

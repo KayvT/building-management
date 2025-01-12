@@ -21,6 +21,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GET_LOCATION, GET_TOPOLOGY } from "../../graphql/queries/tenants";
 import { Spot } from "./Partials.tsx/Spot";
 import { Location } from "@/types/floors";
+import { GET_TASKS } from "../../graphql/queries/tasks";
+import {
+  getLocationHighestPriority,
+  getPriorityColor,
+} from "../../utils/locationUtils";
 
 export const LocationView = () => {
   const { tenantId, locationId, floorId } = useParams();
@@ -40,6 +45,17 @@ export const LocationView = () => {
       pollInterval: 10000,
     }
   );
+
+  const { data: tasksData } = useQuery(GET_TASKS, {
+    variables: {
+      filter: {
+        state: "OPEN",
+      },
+    },
+    pollInterval: 10000,
+  });
+
+  const highestPriority = getLocationHighestPriority(tasksData, locationId);
 
   const [newLocationData, setNewLocationData] = useState<Partial<Location>>({
     name: "",
@@ -136,10 +152,23 @@ export const LocationView = () => {
       <div className="flex flex-row gap-2 items-center justify-between mb-6 pt-4">
         <div className="flex flex-row gap-2 items-center justify-between">
           <div className="flex flex-col gap-1">
-            <p className="text-[8px] bg-[#718cc0] text-white rounded-md px-1 py-1 w-fit">
-              {locationType}
+            <div className="flex flex-row gap-1">
+              {highestPriority && (
+                <p
+                  className={`text-[8px] ${getPriorityColor(
+                    highestPriority
+                  )} text-white rounded-md px-1 py-1 w-fit`}
+                >
+                  {highestPriority}
+                </p>
+              )}
+            </div>
+            <p className="text-2xl font-bold">
+              {locationName}{" "}
+              <span className="text-sm underline text-gray-500">
+                {locationType}
+              </span>
             </p>
-            <p className="text-2xl font-bold">{locationName}</p>
             <p className="text-sm">
               <span
                 className={`${
