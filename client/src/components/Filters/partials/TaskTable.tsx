@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { Drawer } from "@mui/material";
+import { Task } from "@/types/tasks";
+import { Tasks } from "@/types/tasks";
+import { useNavigate, useParams } from "react-router-dom";
+
+
 type TaskTableProps = {
-  tasks: {
-    id: string;
-    location: { name: string; id: string };
-    state: string;
-    createdAt: string;
-    dueAt: string;
-    priority: string;
-    operative: { id: string; name: string };
-  }[];
+  tasks: Tasks;
 };
+
 export default function TaskTable({ tasks }: TaskTableProps) {
-  const [openTaskModal, setOpenTaskModal] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<
-    TaskTableProps["tasks"][0] | null
-  >(null);
+  const navigate = useNavigate();
+
+  const { tenantId } = useParams();
+
+  const handleTaskClick = (task: Task) => {
+    navigate(`/${tenantId}/tasks/${task.id}`);
+  };
 
   return (
     <div className="flex flex-row justify-between items-center w-full">
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-400 border-b">
+            <th className="p-3 text-center text-white">ID</th>
             <th className="p-3 text-center text-white">Location</th>
             <th className="p-3 text-center text-white">Priority</th>
             <th className="p-3 text-center text-white">Created</th>
@@ -34,12 +34,10 @@ export default function TaskTable({ tasks }: TaskTableProps) {
           {tasks.map((task) => (
             <tr
               key={task.id}
-              onClick={() => {
-                setSelectedTask(task);
-                setOpenTaskModal(true);
-              }}
+              onClick={() => handleTaskClick(task)}
               className="border-b hover:bg-gray-200 transition-all duration-300 cursor-pointer"
             >
+              <td className="p-3 text-center">{task?.id}</td>
               <td className="p-3 text-center">{task?.location?.name}</td>
               <td className="p-3 text-center">
                 {task?.priority === "LOW" ? (
@@ -77,10 +75,19 @@ export default function TaskTable({ tasks }: TaskTableProps) {
                   </span>
                 )}
               </td>
-              <td className="p-3 text-center">
-                <div>
+              <td className="p-3">
+                <div className="flex items-center justify-center">
                   {task?.operative?.id ? (
-                    <span className="text-gray-600">{`${task?.operative?.name} || ${task?.operative?.id}`}</span>
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{
+                        backgroundColor: "#755596",
+                      }}
+                    >
+                      <div className="text-white font-bold">
+                        {task?.operative?.name?.charAt(0).toUpperCase()}
+                      </div>
+                    </div>
                   ) : (
                     <span className="text-gray-400">N/A</span>
                   )}
@@ -90,25 +97,6 @@ export default function TaskTable({ tasks }: TaskTableProps) {
           ))}
         </tbody>
       </table>
-      <Drawer
-        open={openTaskModal}
-        onClose={() => setOpenTaskModal(false)}
-        anchor="right"
-      >
-        <div
-          style={{
-            width: "300px",
-          }}
-        >
-          <div>{selectedTask?.id}</div>
-          <div>{selectedTask?.location.name}</div>
-          <div>{selectedTask?.state}</div>
-          <div>{selectedTask?.createdAt}</div>
-          <div>{selectedTask?.dueAt}</div>
-          <div>{selectedTask?.priority}</div>
-          <div>{selectedTask?.operative?.name}</div>
-        </div>
-      </Drawer>
     </div>
   );
 }

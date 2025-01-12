@@ -1,4 +1,3 @@
-import React from "react";
 import TenantDropdown from "./TenantDropDown";
 import { Link, useLocation } from "react-router-dom";
 import { useTenant } from "../../contexts/useTenant";
@@ -9,7 +8,7 @@ const navigation = [
   { name: "Operatives", href: "/operatives" },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 

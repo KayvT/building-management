@@ -1,5 +1,4 @@
 import { InputLabel as MuiInputLabel } from "@mui/material";
-import React from "react";
 
 type InputLabelProps = {
   label: string;

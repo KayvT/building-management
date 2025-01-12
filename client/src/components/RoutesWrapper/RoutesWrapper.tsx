@@ -1,10 +1,10 @@
-import React from "react";
 import { Route, Routes } from "react-router";
 import TopologyLayout from "../../routes/topology/TopologyLayout";
-import TasksRoute from "../../routes/tasks/route";
 import OperativesRoute from "../../routes/operatives/route";
 import { FloorView } from "../TopologyContent/FloorView";
 import { LocationView } from "../TopologyContent/LocationView";
+import TasksLayout from "../../routes/tasks/TasksLayout";
+import { TaskDetailView } from "../TaskDetailView";
 
 export default function RoutesWrapper() {
   return (
@@ -16,7 +16,9 @@ export default function RoutesWrapper() {
           element={<LocationView />}
         />
       </Route>
-      <Route path="/:tenantId/tasks" element={<TasksRoute />} />
+      <Route path="/:tenantId/tasks" element={<TasksLayout />}>
+        <Route path="/:tenantId/tasks/:taskId" element={<TaskDetailView />} />
+      </Route>
       <Route path="/:tenantId/operatives" element={<OperativesRoute />} />
     </Routes>
   );

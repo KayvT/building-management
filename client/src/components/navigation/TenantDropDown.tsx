@@ -7,13 +7,15 @@ import { useTenant } from "../../contexts/useTenant";
 import AddTenantModal from "../AddTenantModal";
 import { Button, MenuItem, Menu } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { TenantData } from "@/types/tenant";
 
 export default function TenantDropdown() {
-  const { data } = useQuery(GET_ALL_TENANTS);
+  const { data } = useQuery<{ tenants: TenantData[] }>(GET_ALL_TENANTS);
   const navigate = useNavigate();
   const { setCurrentTenantId, currentTenantId } = useTenant();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   if (!data?.tenants?.length) return null;
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -55,7 +57,7 @@ export default function TenantDropdown() {
           fontWeight: "bold",
         }}
       >
-        {currentTenant?.name}
+        {currentTenant?.name || "Select Tenant"}
       </Button>
       <Menu
         anchorEl={anchorEl}

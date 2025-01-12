@@ -1,5 +1,4 @@
 import { InputLabel, MenuItem, Select } from "@mui/material";
-import React from "react";
 
 type FilterSelectProps = {
   label: string;

@@ -1,6 +1,14 @@
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
-import React from "react";
+
+type AddNewBranchButtonProps = {
+  caption: string;
+  handleSubmitNewBranch: () => void;
+  isAddingBranch: boolean;
+  setIsAddingBranch: (isAddingBranch: boolean) => void;
+  newBranchName: string;
+  setNewBranchName: (newBranchName: string) => void;
+};
 
 export const AddNewBranchButton = ({
   caption,
@@ -9,7 +17,7 @@ export const AddNewBranchButton = ({
   setIsAddingBranch,
   newBranchName,
   setNewBranchName,
-}) => {
+}: AddNewBranchButtonProps) => {
   const handleAddBranch = () => {
     setIsAddingBranch(true);
   };
