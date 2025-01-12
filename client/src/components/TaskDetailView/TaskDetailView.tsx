@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Drawer, Select, MenuItem, Tooltip } from "@mui/material";
-import { GET_OPERATIVES } from "../graphql/queries/operatives";
+
 import { useApolloClient, useQuery } from "@apollo/client";
-import {
-  ASSIGN_TASK,
-  CLOSE_TASK,
-  GET_TASK,
-  GET_TASKS,
-} from "../graphql/queries/tasks";
+import { GET_TASK, GET_TASKS, GET_OPERATIVES } from "../../graphql/queries";
+import { ASSIGN_TASK, CLOSE_TASK } from "../../graphql/mutations";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 

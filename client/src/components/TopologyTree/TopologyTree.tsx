@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TenantData } from "../../types/tenant";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button, TextField } from "@mui/material";
 import { ADD_FLOOR } from "../../graphql/mutations/topology";
 import { useApolloClient } from "@apollo/client";
-import { GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import { GET_TOPOLOGY } from "../../graphql/queries";
+import { TreeView } from "./TreeView";
 type Props = {
   tree: {
     tenant: TenantData;
@@ -52,7 +53,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
         <div className="flex flex-row gap-2 items-center justify-between">
           <div className="font-bold text-2xl mb-3">🏛️ {tree?.tenant?.name}</div>
         </div>
-        {tree?.tenant?.floors?.map((floor) => (
+        {/* {tree?.tenant?.floors?.map((floor) => (
           <div key={floor.id}>
             <Link
               to={`/${tree.tenant.id}/topology/floors/${floor.id}`}
@@ -63,7 +64,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
               <div className="absolute left-0 top-1/2 w-5 h-[2px] bg-gray-200" />
               <div className="flex flex-row gap-2 items-center justify-between w-full">
                 <span
-                  className="hover:text-blue-600 transition-all duration-300 
+                  className="hover:text-blue-600 truncate ... transition-all duration-300 
                  cursor-pointer hover:translate-y-[-2px] hover:font-bold"
                 >
                   🏗️ {floor.name}
@@ -87,7 +88,7 @@ export const TopologyTreeView = ({ tree }: Props) => {
                   <div className="absolute left-0 top-1/2 w-8 h-[2px] bg-gray-200" />
                   <span
                     className="hover:text-blue-600 transition-all duration-300 
-                 cursor-pointer hover:translate-y-[-2px] hover:font-bold"
+                 cursor-pointer hover:translate-y-[-2px] hover:font-bold truncate ..."
                   >
                     🎯 {location.name}
                   </span>
@@ -100,13 +101,14 @@ export const TopologyTreeView = ({ tree }: Props) => {
                   >
                     <div className="absolute left-0 top-0 h-full w-[2px] bg-gray-200" />
                     <div className="absolute left-0 top-1/2 w-12 h-[2px] bg-gray-200" />
-                    <span>📍 {spot.name}</span>
+                    <span className="truncate ...">📍 {spot.name}</span>
                   </div>
                 ))}
               </React.Fragment>
             ))}
           </div>
-        ))}
+        ))} */}
+        <TreeView floors={tree?.tenant?.floors} />
       </div>
       {isAddingFloor ? (
         <div className="mt-4 flex flex-col gap-2">

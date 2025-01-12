@@ -10,12 +10,9 @@ import {
   InputLabel,
   CircularProgress,
 } from "@mui/material";
-import { GET_TASKS } from "../../graphql/queries/tasks";
+import { GET_TASKS } from "../../graphql/queries/tasks/getTasks";
 import { useState } from "react";
-import {
-  GET_LOCATIONS,
-  GET_OPERATIVES,
-} from "../../graphql/queries/operatives";
+import { GET_LOCATIONS, GET_OPERATIVES } from "../../graphql/queries";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
 import { CREATE_TASK } from "../../graphql/mutations/tasks";
@@ -199,8 +196,24 @@ export default function AddTaskDialog({
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpenTaskModal(false)}>Cancel</Button>
-        <Button onClick={handleAddNewTask}>Add</Button>
+        <Button onClick={() => setOpenTaskModal(false)} variant="outlined">
+          Cancel
+        </Button>
+        <Button
+          sx={{
+            width: "20%",
+          }}
+          onClick={handleAddNewTask}
+          variant="contained"
+          disabled={
+            newTask.operativeId === "" ||
+            newTask.locationId === "" ||
+            newTask.priority === "" ||
+            newTask.dueAt === null
+          }
+        >
+          Add
+        </Button>
       </DialogActions>
     </Dialog>
   );

@@ -7,8 +7,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { UPDATE_SPOT } from "../../../graphql/mutations/topology";
 import { useApolloClient } from "@apollo/client";
-import { DELETE_SPOT } from "../../../graphql/queries/tenants";
-import { GET_LOCATION } from "../../../graphql/queries/tenants";
+import { DELETE_SPOT } from "../../../graphql/mutations";
+import { GET_LOCATION } from "../../../graphql/queries";
 import { LocationSpot } from "@/types/tenant";
 import { toast } from "react-toastify";
 
@@ -20,7 +20,7 @@ export const Spot = ({ spot }: SpotProps) => {
   const [isEditingSpotName, setIsEditingSpotName] = useState(false);
   const [newSpotName, setNewSpotName] = useState(spot.name ?? "");
   const client = useApolloClient();
-  //TODO: if there is time, I should probably move this to a global content or hook or something
+  //TODO: if there is time, I should probably move this to a global context or hook or something
   const notify = (message: string, type: "success" | "error") =>
     toast(message, { type });
 
