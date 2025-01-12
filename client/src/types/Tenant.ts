@@ -1,7 +1,12 @@
+import { Operative } from "./operative";
+import { Task } from "./tasks";
+
 export type TenantData = {
   id: string;
   name: string;
   floors: TenantFloor[];
+  operatives: Operative[];
+  tasks: Task[];
 };
 
 export type TenantFloor = {
@@ -35,5 +40,5 @@ export type SpotEntry = LocationSpot & {
   type: "spot";
 };
 
-// 2) Combine them into a single union:
+
 export type TenantEntry = FloorEntry | LocationEntry | SpotEntry;
