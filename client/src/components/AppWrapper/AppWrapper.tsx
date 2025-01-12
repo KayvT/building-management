@@ -16,15 +16,13 @@ export default function AppWrapper({ children }: { children: ReactNode }) {
     if (tenantId) {
       setCurrentTenantId(tenantId);
     } else if (currentTenantId) {
-      if (location.pathname === "/") {
-        navigate(`/${currentTenantId}/topology`);
-      }
+      return;
     } else if (data?.tenants?.[0]?.id) {
       const firstTenantId = data.tenants[0].id;
       setCurrentTenantId(firstTenantId);
-      navigate(`/${firstTenantId}/topology`);
     }
   }, [tenantId, currentTenantId, setCurrentTenantId, data, navigate]);
+
 
   if (loading)
     return (
