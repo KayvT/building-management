@@ -31,7 +31,7 @@ export default function TenantDropdown() {
     setCurrentTenantId(tenantId);
     navigate(`/${tenantId}/topology`);
     handleMenuClose();
-    notify("Tenant changed successfully", "info");
+    notify("Tenant changed successfully!", "info");
   };
 
   const handleAddTenant = (e: React.MouseEvent) => {

@@ -36,7 +36,7 @@ export const Spot = ({ spot }: SpotProps) => {
         },
         refetchQueries: [GET_LOCATION],
       });
-      notify("Spot updated successfully", "success");
+      notify("Spot updated successfully!", "success");
       setIsEditingSpotName(false);
       setNewSpotName(spot.name ?? "");
     } catch (error) {
@@ -53,7 +53,7 @@ export const Spot = ({ spot }: SpotProps) => {
         },
         refetchQueries: [GET_LOCATION],
       });
-      notify("Spot deleted successfully", "success");
+      notify("Spot deleted successfully!", "success");
     } catch (error) {
       console.error(error);
     }

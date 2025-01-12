@@ -64,7 +64,7 @@ export default function OperativesRoute() {
           }
         );
       } else {
-        toast("Operative deleted successfully", { type: "success" });
+        toast("Operative deleted successfully!", { type: "success" });
       }
     } catch (error) {
       console.error("Error deleting operative", error);
@@ -82,7 +82,7 @@ export default function OperativesRoute() {
         },
         refetchQueries: [GET_OPERATIVES_DETAILS],
       });
-      notify("Operative added successfully", "success");
+      notify("Operative added successfully!", "success");
       setOpen(false);
       setNewOperative({
         name: "",

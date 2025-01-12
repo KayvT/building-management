@@ -60,7 +60,7 @@ export const FloorView = () => {
           "error"
         );
       } else {
-        notify("Location deleted successfully", "success");
+        notify("Location deleted successfully!", "success");
         navigate(`/${tenantId}/topology/floors/${floorId}`);
       }
     } catch (error) {
@@ -83,7 +83,7 @@ export const FloorView = () => {
           "error"
         );
       } else {
-        notify("Floor deleted successfully", "success");
+        notify("Floor deleted successfully!", "success");
         navigate(`/${tenantId}/topology`);
       }
     } catch (error) {

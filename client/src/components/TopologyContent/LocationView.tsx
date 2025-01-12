@@ -94,7 +94,7 @@ export const LocationView = () => {
           "error"
         );
       } else {
-        notify("Location deleted successfully", "success");
+        notify("Location deleted successfully!", "success");
         navigate(`/${tenantId}/topology/floors/${floorId}`);
       }
     } catch (error) {

@@ -72,7 +72,7 @@ export const TaskDetailView = () => {
         refetchQueries: [GET_TASKS],
       });
       notify(
-        `Task assigned to ${data?.assignTask?.operative?.name} successfully`,
+        `Task assigned to ${data?.assignTask?.operative?.name} successfully!`,
         "success"
       );
     } catch (error) {
@@ -91,7 +91,7 @@ export const TaskDetailView = () => {
         refetchQueries: [GET_TASKS],
       });
       setTaskAssignedOperative(null);
-      notify("Task unassigned successfully", "success");
+      notify("Task unassigned successfully!", "success");
     } catch (error) {
       console.error(error);
     }
@@ -105,7 +105,7 @@ export const TaskDetailView = () => {
         refetchQueries: [GET_TASKS],
       });
       setIsClosingTask(false);
-      notify("Task closed successfully", "success");
+      notify("Task closed successfully!", "success");
     } catch (error) {
       console.error(error);
     }

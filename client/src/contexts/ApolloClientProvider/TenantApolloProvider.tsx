@@ -12,6 +12,7 @@ export function TenantApolloProvider({
   const client = useMemo(() => {
     return new ApolloClient({
       uri: "https://building-management-8ed5.onrender.com",
+      // uri: "http://localhost:4000",
       cache: new InMemoryCache(),
       headers: {
         "X-Tenant-ID": currentTenantId || "",

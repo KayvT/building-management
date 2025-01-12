@@ -72,7 +72,7 @@ export default function AddTaskDialog({
         refetchQueries: [GET_TASKS],
       });
       if (data?.createTask?.id) {
-        notify("Task added successfully", "success");
+        notify("Task added successfully!", "success");
         setOpenTaskModal(false);
         navigate(`/topology/tasks/${data?.createTask?.id}`);
         setNewTask({

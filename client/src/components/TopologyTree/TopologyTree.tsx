@@ -6,6 +6,7 @@ import { ADD_FLOOR } from "../../graphql/mutations/topology";
 import { useApolloClient } from "@apollo/client";
 import { GET_TOPOLOGY } from "../../graphql/queries";
 import { TreeView } from "./TreeView";
+import { toast } from "react-toastify";
 type Props = {
   tree: {
     tenant: TenantData;
@@ -17,7 +18,8 @@ export const TopologyTreeView = ({ tree }: Props) => {
   const { tenantId } = useParams();
   const client = useApolloClient();
   const navigate = useNavigate();
-
+  const notify = (message: string, type: "success" | "error") =>
+    toast(message, { type });
   const handleSubmitNewFloor = async () => {
     try {
       const { data } = await client.mutate({
@@ -29,7 +31,9 @@ export const TopologyTreeView = ({ tree }: Props) => {
       });
       setIsAddingFloor(false);
       setNewFloorName("");
-      navigate(`/${tenantId}/topology/floors/${data.createFloor.id}`);
+      navigate(`/${tenantId}/topology/floors/${data.createFloor.id}
+        `);
+      notify("Floor added successfully!", "success");
     } catch (error) {
       console.error(error);
     }
@@ -53,61 +57,6 @@ export const TopologyTreeView = ({ tree }: Props) => {
         <div className="flex flex-row gap-2 items-center justify-between">
           <div className="font-bold text-2xl mb-3">🏛️ {tree?.tenant?.name}</div>
         </div>
-        {/* {tree?.tenant?.floors?.map((floor) => (
-          <div key={floor.id}>
-            <Link
-              to={`/${tree.tenant.id}/topology/floors/${floor.id}`}
-              style={{ paddingLeft: "20px" }}
-              className="flex items-center relative ml-2 pt-1 pb-1 cursor-pointer"
-            >
-              <div className="absolute left-0 top-0 h-full w-[2px] bg-gray-200" />
-              <div className="absolute left-0 top-1/2 w-5 h-[2px] bg-gray-200" />
-              <div className="flex flex-row gap-2 items-center justify-between w-full">
-                <span
-                  className="hover:text-blue-600 truncate ... transition-all duration-300 
-                 cursor-pointer hover:translate-y-[-2px] hover:font-bold"
-                >
-                  🏗️ {floor.name}
-                </span>
-              </div>
-            </Link>
-            {floor.locations?.map((location, locationIndex) => (
-              <React.Fragment key={location.id}>
-                <Link
-                  to={`/${tree.tenant.id}/topology/floors/${floor.id}/locations/${location.id}`}
-                  className="flex items-center relative ml-2 pt-1 pb-1 pl-[40px]
-                  whitespace-nowrap cursor-pointer"
-                >
-                  <div
-                    className={`absolute left-0 top-0 h-full w-[2px] bg-gray-200 ${
-                      locationIndex === floor.locations.length - 1
-                        ? "h-1/2"
-                        : ""
-                    }`}
-                  />
-                  <div className="absolute left-0 top-1/2 w-8 h-[2px] bg-gray-200" />
-                  <span
-                    className="hover:text-blue-600 transition-all duration-300 
-                 cursor-pointer hover:translate-y-[-2px] hover:font-bold truncate ..."
-                  >
-                    🎯 {location.name}
-                  </span>
-                </Link>
-                {location.spots?.map((spot) => (
-                  <div
-                    key={spot.id}
-                    style={{ paddingLeft: "60px" }}
-                    className="flex items-center relative ml-2 pt-1 pb-1"
-                  >
-                    <div className="absolute left-0 top-0 h-full w-[2px] bg-gray-200" />
-                    <div className="absolute left-0 top-1/2 w-12 h-[2px] bg-gray-200" />
-                    <span className="truncate ...">📍 {spot.name}</span>
-                  </div>
-                ))}
-              </React.Fragment>
-            ))}
-          </div>
-        ))} */}
         <TreeView floors={tree?.tenant?.floors} />
       </div>
       {isAddingFloor ? (
