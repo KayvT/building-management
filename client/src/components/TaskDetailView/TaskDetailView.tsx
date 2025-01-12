@@ -2,21 +2,40 @@ import { useState } from "react";
 import { Drawer, Select, MenuItem, Tooltip } from "@mui/material";
 
 import { useApolloClient, useQuery } from "@apollo/client";
-import { GET_TASK, GET_TASKS, GET_OPERATIVES } from "../../graphql/queries";
+import {
+  GET_TASK,
+  GET_TASKS,
+  GET_OPERATIVES,
+  GET_TENANT,
+} from "../../graphql/queries";
 import { ASSIGN_TASK, CLOSE_TASK } from "../../graphql/mutations";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Floor, Location } from "@/types/floors";
 
 export const TaskDetailView = () => {
   const notify = (message: string, type: "success" | "error") =>
     toast(message, { type });
   const { taskId, tenantId } = useParams();
   const { data: operatives } = useQuery(GET_OPERATIVES);
+  const [isClosingTask, setIsClosingTask] = useState(false);
   const navigate = useNavigate();
+
   const { data } = useQuery(GET_TASK, {
     variables: { id: taskId },
   });
   const task = data?.task;
+
+  const { data: tenantData } = useQuery(GET_TENANT, {
+    variables: { locationId: task?.location.id },
+  });
+  // filter through tenant and find the floor the location is on
+  const taskFloor = tenantData?.tenant?.floors?.find((floor: Floor) =>
+    floor.locations.some(
+      (location: Location) => location.id === task?.location.id
+    )
+  );
+
   const client = useApolloClient();
 
   const handleClose = () => {
@@ -78,6 +97,7 @@ export const TaskDetailView = () => {
         variables: { taskId: taskId },
         refetchQueries: [GET_TASKS],
       });
+      setIsClosingTask(false);
       notify("Task closed successfully", "success");
     } catch (error) {
       console.error(error);
@@ -115,8 +135,8 @@ export const TaskDetailView = () => {
             {task?.location?.name}
           </div>
           {task?.state === "OPEN" ? (
-            <Tooltip title="Close Task" placement="top" arrow>
-              <button onClick={handleCloseTask}>
+            <Tooltip title="Complete Task" placement="top" arrow>
+              <button onClick={() => setIsClosingTask(true)}>
                 <svg
                   className="w-6 h-6 text-green-500"
                   fill="none"
@@ -219,16 +239,57 @@ export const TaskDetailView = () => {
               </>
             )}
           </div>
+          {isClosingTask ? (
+            <div>
+              <div className="text-sm text-gray-500 mb-1">
+                Are you sure you want to close this task?
+              </div>
+              <div className="flex justify-between">
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                  onClick={() => setIsClosingTask(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                  onClick={handleCloseTask}
+                >
+                  Yes, complete task
+                </button>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
 
-        {task?.createdAt && (
-          <div className="mt-auto pt-6 border-t">
-            <div className="text-sm text-gray-500">Task created at:</div>
-            <div className="text-gray-700">
-              {new Date(task?.createdAt).toLocaleString()}
+        <div className="mt-auto pt-6">
+          <div className="flex justify-between">
+            <div>
+              <p className="text-sm text-gray-500">FloorID | Name</p>
+              <p>
+                {taskFloor?.id} | {taskFloor?.name}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Task ID:</p>
+              <p className="text-center">{task?.id}</p>
             </div>
           </div>
-        )}
+          <div className="border-t mt-2 mb-2">
+            {task?.createdAt && (
+              <>
+                <div className="text-sm text-gray-500 mt-2">
+                  Task created at:
+                </div>
+                <div className="text-gray-700">
+                  {new Date(task?.createdAt).toLocaleString()}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </Drawer>
   );
