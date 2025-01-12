@@ -6,8 +6,8 @@ import { GET_TOPOLOGY } from "../../graphql/queries/tenants";
 import { Box, CircularProgress } from "@mui/material";
 
 export default function TopologyLayout() {
-  const { data: topologyTreeData, loading } = useQuery(GET_TOPOLOGY);
   const { tenantId } = useParams();
+  const { data: topologyTreeData, loading } = useQuery(GET_TOPOLOGY);
   const path = useLocation();
   const isEmptyView = path.pathname === `/${tenantId}/topology`;
 
