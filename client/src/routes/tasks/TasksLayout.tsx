@@ -7,11 +7,11 @@ import {
 import { useState } from "react";
 import Filters from "../../components/Filters/Filters";
 import { useQuery } from "@apollo/client";
-import { GET_TASKS } from "../../graphql/queries/tasks";
+import { GET_TASKS } from "../../graphql/queries";
 import TaskTable from "../../components/Filters/partials/TaskTable";
-import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
+import AddTaskDialog from "../../components/Dialogs/AddTaskDialog/AddTaskDialog";
 import { Outlet } from "react-router";
-import { GET_OPERATIVES } from "../../graphql/queries/operatives";
+import { GET_OPERATIVES } from "../../graphql/queries";
 
 export default function TasksLayout() {
   const [openTaskModal, setOpenTaskModal] = useState(false);

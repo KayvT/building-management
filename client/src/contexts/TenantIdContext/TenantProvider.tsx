@@ -14,6 +14,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     }
   }, [currentTenantId]);
 
+  
   return (
     <TenantContext.Provider value={{ currentTenantId, setCurrentTenantId }}>
       {children}

@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useParams } from "react-router-dom";
 import { TopologyTreeView } from "../../components/TopologyTree/TopologyTree";
 import { useQuery } from "@apollo/client";
-import { GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import { GET_TOPOLOGY } from "../../graphql/queries";
 import { Box, CircularProgress } from "@mui/material";
 
 export default function TopologyLayout() {

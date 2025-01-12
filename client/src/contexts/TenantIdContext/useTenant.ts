@@ -7,4 +7,4 @@ export function useTenant() {
     throw new Error("useTenant must be used within a TenantProvider");
   }
   return context;
-} 
+}

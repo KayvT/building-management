@@ -13,11 +13,8 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useApolloClient, useQuery } from "@apollo/client";
-import {
-  ADD_OPERATIVE,
-  DELETE_OPERATIVE,
-  GET_OPERATIVES_DETAILS,
-} from "../../graphql/queries/operatives";
+import { CREATE_OPERATIVE, DELETE_OPERATIVE } from "../../graphql/mutations";
+import { GET_OPERATIVES_DETAILS } from "../../graphql/queries";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Operative } from "@/types/operative";
 import { toast } from "react-toastify";
@@ -65,7 +62,7 @@ export default function OperativesRoute() {
   const handleAddOperative = async () => {
     try {
       await client.mutate({
-        mutation: ADD_OPERATIVE,
+        mutation: CREATE_OPERATIVE,
         variables: {
           name: newOperative.name,
           code: newOperative.code,
