@@ -1,5 +1,9 @@
-import React from "react";
-import { Box, CircularProgress, Button } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Button,
+  SelectChangeEvent,
+} from "@mui/material";
 import { useState } from "react";
 import Filters from "../../components/Filters/Filters";
 import { useQuery } from "@apollo/client";
@@ -7,9 +11,80 @@ import { GET_TASKS } from "../../graphql/queries/tasks";
 import TaskTable from "../../components/Filters/partials/TaskTable";
 import AddTaskDialog from "../../components/AddTaskDialog/AddTaskDialog";
 import { Outlet } from "react-router";
+import { GET_OPERATIVES } from "../../graphql/queries/operatives";
 export default function TasksLayout() {
-  const { data, loading, error } = useQuery(GET_TASKS);
   const [openTaskModal, setOpenTaskModal] = useState(false);
+  const [filters, setFilters] = useState<{
+    priority: string | undefined;
+    state: string | undefined;
+    operativeId: string | undefined | null;
+  }>({
+    priority: undefined,
+    state: undefined,
+    operativeId: undefined,
+  });
+  const { data: operativesData } = useQuery(GET_OPERATIVES);
+  const { data, loading, error, refetch } = useQuery(GET_TASKS, {
+    variables: {
+      filter: filters,
+    },
+  });
+
+  const handlePriorityChange = (value: string) => {
+    if (value === filters.priority) {
+      setFilters({ ...filters, priority: undefined });
+    } else {
+      setFilters({ ...filters, priority: value });
+    }
+    refetch({
+      variables: {
+        filter: filters,
+      },
+    });
+  };
+
+  const handleStateChange = (value: string) => {
+    if (value === filters.state) {
+      setFilters({ ...filters, state: undefined });
+    } else {
+      setFilters({ ...filters, state: value });
+    }
+    refetch({
+      variables: {
+        filter: filters,
+      },
+    });
+  };
+
+  const handleOperativeChange = (event?: SelectChangeEvent<string | null>) => {
+    if (!event) {
+      setFilters({ ...filters, operativeId: null });
+    }
+    if (event?.target.value === filters.operativeId) {
+      setFilters({ ...filters, operativeId: undefined });
+    } else {
+      setFilters({ ...filters, operativeId: event?.target.value });
+    }
+    refetch({
+      variables: {
+        filter: filters,
+      },
+    });
+  };
+
+  const handleClear = () => {
+    setFilters({
+      ...filters,
+      priority: undefined,
+      state: undefined,
+      operativeId: undefined,
+    });
+    refetch({
+      variables: {
+        filter: filters,
+      },
+    });
+  };
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Error: {error.message}</div>;
@@ -51,7 +126,14 @@ export default function TasksLayout() {
             boxShadow={4}
           >
             <div className="flex flex-row justify-between items-center w-full">
-              <Filters />
+              <Filters
+                operatives={operativesData?.tenant?.operatives}
+                filters={filters}
+                handlePriorityChange={handlePriorityChange}
+                handleStateChange={handleStateChange}
+                handleOperativeChange={handleOperativeChange}
+                handleClear={handleClear}
+              />
               <Button
                 variant="contained"
                 color="primary"
