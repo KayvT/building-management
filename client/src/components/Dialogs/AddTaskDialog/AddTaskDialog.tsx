@@ -191,6 +191,7 @@ export default function AddTaskDialog({
             Due At
           </InputLabel>
           <DatePicker
+            disablePast
             value={newTask.dueAt}
             onChange={(value) => setNewTask({ ...newTask, dueAt: value })}
             sx={{
