@@ -142,15 +142,15 @@ export default function OperativesRoute() {
 
                 <div className="space-y-2 text-sm">
                   <p className="text-gray-600">
-                    <span className="font-medium">Op ID: </span>
+                    <span className="font-medium">ID: </span>
                     <span>{operative?.id}</span>
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Op Code: </span>
+                    <span className="font-medium">Code: </span>
                     <span>{operative?.code}</span>
                   </p>
                   <p className="text-gray-600">
-                    <span className="font-medium">Op Human: </span>
+                    <span className="font-medium">Is Human: </span>
                     <span>{operative?.isHuman ? "Yes" : "No"}</span>
                   </p>
                 </div>
