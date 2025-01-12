@@ -2,23 +2,28 @@ import { useEffect } from "react";
 import { ReactNode } from "react";
 import { useTenant } from "../../contexts/TenantIdContext/useTenant";
 import { GET_ALL_TENANTS } from "../../graphql/queries";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 export default function AppWrapper({ children }: { children: ReactNode }) {
   const { data, loading } = useQuery(GET_ALL_TENANTS);
   const { tenantId } = useParams();
   const { currentTenantId, setCurrentTenantId } = useTenant();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (tenantId) {
       setCurrentTenantId(tenantId);
     } else if (currentTenantId) {
-      return;
+      if (location.pathname === "/") {
+        navigate(`/${currentTenantId}/topology`);
+      }
     } else if (data?.tenants?.[0]?.id) {
-      setCurrentTenantId(data.tenants[0].id);
+      const firstTenantId = data.tenants[0].id;
+      setCurrentTenantId(firstTenantId);
+      navigate(`/${firstTenantId}/topology`);
     }
-  }, [tenantId, currentTenantId, setCurrentTenantId, data]);
+  }, [tenantId, currentTenantId, setCurrentTenantId, data, navigate]);
 
   if (loading) return null;
 
