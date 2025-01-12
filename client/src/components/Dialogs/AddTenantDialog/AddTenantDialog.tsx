@@ -8,10 +8,10 @@ import {
   TextField,
 } from "@mui/material";
 import { useApolloClient } from "@apollo/client";
-import { createTenant } from "../../graphql/mutations/tenants";
-import { GET_ALL_TENANTS } from "../../graphql/queries/tenants";
-import { useTenant } from "../../contexts/useTenant";
+import { CREATE_TENANT } from "../../../graphql/mutations";
+import { useTenant } from "../../../contexts/TenantIdContext/useTenant";
 import { useNavigate } from "react-router-dom";
+import { GET_ALL_TENANTS } from "../../../graphql/queries";
 
 export default function AddTenantModal({
   open,
@@ -33,7 +33,7 @@ export default function AddTenantModal({
   const handleAddTenant = async () => {
     try {
       const { data } = await client.mutate({
-        mutation: createTenant,
+        mutation: CREATE_TENANT,
         variables: { name: tenantName },
         refetchQueries: [{ query: GET_ALL_TENANTS }],
       });

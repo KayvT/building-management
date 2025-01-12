@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
   ADD_SPOT,
   DELETE_LOCATION,
-  GET_FLOOR,
   UPDATE_LOCATION,
 } from "../../graphql/mutations/topology";
 import {
@@ -18,10 +17,15 @@ import {
   TextField,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { GET_LOCATION, GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import {
+  GET_LOCATION,
+  GET_TOPOLOGY,
+  GET_TASKS,
+  GET_FLOOR,
+} from "../../graphql/queries";
 import { Spot } from "./Partials.tsx/Spot";
 import { Location } from "@/types/floors";
-import { GET_TASKS } from "../../graphql/queries/tasks";
+
 import {
   getLocationHighestPriority,
   getPriorityColor,

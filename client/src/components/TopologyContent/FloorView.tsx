@@ -6,16 +6,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   ADD_LOCATION,
   DELETE_LOCATION,
-  GET_FLOOR,
   UPDATE_FLOOR,
-} from "../../graphql/mutations/topology";
+  DELETE_FLOOR,
+} from "../../graphql/mutations";
 import { Button, CircularProgress, IconButton, TextField } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 
-import { DELETE_FLOOR, GET_TOPOLOGY } from "../../graphql/queries/tenants";
+import { GET_TOPOLOGY, GET_FLOOR } from "../../graphql/queries";
 import { Floor } from "@/types/floors";
+import { FloorLocation } from "./Partials.tsx/Location";
 
 export const FloorView = () => {
   const [isAddingLocation, setIsAddingLocation] = useState(false);
@@ -264,30 +264,10 @@ export const FloorView = () => {
             index % 2 === 0 ? "bg-gray-100" : ""
           }`}
         >
-          <p className="text-md text-black pl-3 mt-3 mb-3 text-center">
-            {location.name}
-          </p>
-          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
-            {location.id}
-          </p>
-          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
-            {location.occupancy}
-          </p>
-          <p className="text-md text-gray-500 pl-3 mt-3 mb-3 text-center">
-            {location.spots.length}
-          </p>
-          <div className="text-md text-blue-500 mt-3 mb-3 text-center">
-            <IconButton
-              aria-label="Add Location"
-              disableRipple
-              onClick={() => handleDeleteLocation(location.id)}
-              sx={{
-                padding: 0,
-              }}
-            >
-              <DeleteIcon sx={{ color: "#d32f2f", opacity: 0.8 }} />
-            </IconButton>
-          </div>
+          <FloorLocation
+            location={location}
+            handleDeleteLocation={handleDeleteLocation}
+          />
         </div>
       ))}
       {isAddingLocation ? (

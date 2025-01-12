@@ -4,7 +4,7 @@ import OperativesRoute from "../../routes/operatives/route";
 import { FloorView } from "../TopologyContent/FloorView";
 import { LocationView } from "../TopologyContent/LocationView";
 import TasksLayout from "../../routes/tasks/TasksLayout";
-import { TaskDetailView } from "../TaskDetailView";
+import { TaskDetailView } from "../TaskDetailView/TaskDetailView";
 
 export default function RoutesWrapper() {
   return (

@@ -1,6 +1,6 @@
 import TenantDropdown from "./TenantDropDown";
 import { Link, useLocation } from "react-router-dom";
-import { useTenant } from "../../contexts/useTenant";
+import { useTenant } from "../../contexts/TenantIdContext/useTenant";
 
 const navigation = [
   { name: "Topology", href: "/topology" },

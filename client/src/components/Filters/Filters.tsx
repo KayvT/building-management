@@ -22,7 +22,8 @@ type FiltersProps = {
   };
   handleClear: () => void;
 };
-
+const states = ["OPEN", "CLOSED"];
+const priorities = ["LOW", "MEDIUM", "HIGH", "URGENT"];
 export default function Filters({
   operatives,
   handlePriorityChange,
@@ -54,46 +55,22 @@ export default function Filters({
               gap: "4px",
             }}
           >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.priority === "LOW"}
-                  onChange={() => handlePriorityChange("LOW")}
-                />
-              }
-              label="Low"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.priority === "MEDIUM"}
-                  onChange={() => handlePriorityChange("MEDIUM")}
-                />
-              }
-              label="Medium"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.priority === "HIGH"}
-                  onChange={() => handlePriorityChange("HIGH")}
-                />
-              }
-              label="High"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.priority === "URGENT"}
-                  onChange={() => handlePriorityChange("URGENT")}
-                />
-              }
-              label="Urgent"
-            />
+            {priorities.map((priority) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    disableRipple
+                    size="small"
+                    checked={filters.priority === priority}
+                    onChange={() => handlePriorityChange(priority)}
+                  />
+                }
+                label={
+                  priority.toLowerCase().charAt(0).toUpperCase() +
+                  priority.slice(1).toLowerCase()
+                }
+              />
+            ))}
           </FormGroup>
         </div>
 
@@ -106,28 +83,25 @@ export default function Filters({
               gap: "4px",
             }}
           >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.state === "OPEN"}
-                  onChange={() => handleStateChange("OPEN")}
-                />
-              }
-              label="Open"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  checked={filters.state === "CLOSED"}
-                  onChange={() => handleStateChange("CLOSED")}
-                />
-              }
-              label="Closed"
-            />
+            {states.map((state) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    disableRipple
+                    size="small"
+                    checked={filters.state === state}
+                    onChange={() => handleStateChange(state)}
+                  />
+                }
+                label={
+                  state.toLowerCase().charAt(0).toUpperCase() +
+                  state.slice(1).toLowerCase()
+                }
+              />
+            ))}
           </FormGroup>
         </div>
+
         <div className="flex flex-col justify-center items-start">
           <InputLabel label="Operative" />
           <div className="flex flex-row items-center gap-2">
